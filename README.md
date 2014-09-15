@@ -2,7 +2,10 @@
 
 Simple JavaScript CSV to Markdown Table Converter
 
-Currently requires MooTools 1.2+ (Tested in 1.3.x -> 1.5.x).  I am actively working to remove this requirement.
+Requires **no external libraries**.
+
+Works in Node as well as in the browser.
+
 
 Example Use:
 
