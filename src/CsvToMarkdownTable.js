@@ -5,7 +5,7 @@
  *
  * @param {string} csvContent - The string content of the CSV
  * @param {string} delimiter - The character(s) to use as the CSV column delimiter
- * @param {bool} hasHeader - Whether to use the first row of Data as headers
+ * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
 function csvToMarkdown( csvContent, delimiter, hasHeader ) {
