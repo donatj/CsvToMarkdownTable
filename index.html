@@ -6,6 +6,64 @@
 </style>
 <script src="//ajax.googleapis.com/ajax/libs/mootools/1.5.1/mootools-yui-compressed.js"></script>
 <script src="src/CsvToMarkdownTable.js"></script>
+<script>
+	"use strict";
+
+	window.addEvent('domready', function() {
+		var insertAtCursor = function( myField, myValue ) {
+			//IE support
+			if( document.selection ) {
+				myField.focus();
+				sel = document.selection.createRange();
+				sel.text = myValue;
+			}
+			//MOZILLA/NETSCAPE support
+			else if( myField.selectionStart || myField.selectionStart == '0' ) {
+				var startPos = myField.selectionStart;
+				var endPos = myField.selectionEnd;
+				myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+				myField.selectionStart = startPos + myValue.length;
+				myField.selectionEnd = myField.selectionStart;
+			} else {
+				myField.value += myValue;
+			}
+		};
+
+		var input = $('tsv-input');
+		var output = $('table-output');
+
+		var headerCheckbox = $('has-headers');
+		var delimiterMarker = $('delimiter-marker');
+
+		input.addEvent('keydown', function( e ) {
+			if( e.key == 'tab' ) {
+				e.stop();
+				insertAtCursor(e.target, "\t");
+			}
+		});
+
+		var renderTable = function() {
+			var value = input.get('value').trim();
+
+			var hasHeader = headerCheckbox.get('checked');
+
+			var delim = delimiterMarker.get('value');
+			if( delim == 'tab' ) {
+				delim = "\t";
+			}
+
+			output.set('value', csvToMarkdown(value, delim, hasHeader));
+		};
+
+		input.addEvent('keyup', renderTable);
+		headerCheckbox.addEvent('change', renderTable);
+		delimiterMarker.addEvent('change', renderTable);
+
+		output.addEvent('click', function( e ) {
+			e.target.select();
+		});
+	});
+</script>
 <body>
 <textarea style="width: 100%; height: 200px;" id="tsv-input"></textarea>
 <input type="checkbox" id="has-headers" />

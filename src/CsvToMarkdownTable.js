@@ -1,123 +1,81 @@
 "use strict";
 
-window.addEvent('domready', function() {
-	var insertAtCursor = function( myField, myValue ) {
-		//IE support
-		if( document.selection ) {
-			myField.focus();
-			sel = document.selection.createRange();
-			sel.text = myValue;
-		}
-		//MOZILLA/NETSCAPE support
-		else if( myField.selectionStart || myField.selectionStart == '0' ) {
-			var startPos = myField.selectionStart;
-			var endPos = myField.selectionEnd;
-			myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
-			myField.selectionStart = startPos + myValue.length;
-			myField.selectionEnd = myField.selectionStart;
-		} else {
-			myField.value += myValue;
-		}
-	};
+/**
+ * Converts CSV to Markdown Table
+ *
+ * @param {string} csvContent - The string content of the CSV
+ * @param {string} delimiter - The character(s) to use as the CSV column delimiter
+ * @param {bool} hasHeader - Whether to use the first row of Data as headers
+ * @returns {string}
+ */
+function csvToMarkdown( csvContent, delimiter, hasHeader ) {
+	if( delimiter != "\t" ) {
+		csvContent = csvContent.replace(/\t/g, "    ");
+	}
+	var columns = csvContent.split("\n");
 
-	var input = $('tsv-input');
-	var output = $('table-output');
+	var tabularData = [];
+	var maxRowLen = [];
 
-	var headerCheckbox = $('has-headers');
-	var delimiterMarker = $('delimiter-marker');
-
-	input.addEvent('keydown', function( e ) {
-		if( e.key == 'tab' ) {
-			e.stop();
-			insertAtCursor(e.target, "\t");
-		}
-	});
-
-	var renderTable = function() {
-		var value = input.get('value').trim();
-		var columns = value.split("\n");
-
-		var table = [];
-		var maxRowLen = [];
-
-		var delim = delimiterMarker.get('value');
-		if( delim == 'tab' ) {
-			delim = "\t";
+	columns.forEach(function( e, i ) {
+		if( typeof tabularData[i] == "undefined" ) {
+			tabularData[i] = [];
 		}
 
-		columns.forEach(function( e, i ) {
-			if( typeof table[i] == "undefined" ) {
-				table[i] = [];
+		var row = e.split(delimiter);
+
+		row.forEach(function( ee, ii ) {
+			if( typeof maxRowLen[ii] == "undefined" ) {
+				maxRowLen[ii] = 0;
 			}
 
-			var row = e.split(delim);
-
-			row.forEach(function( ee, ii ) {
-				if( typeof maxRowLen[ii] == "undefined" ) {
-					maxRowLen[ii] = 0;
-				}
-
-				maxRowLen[ii] = Math.max(maxRowLen[ii], ee.length);
-
-				table[i][ii] = ee;
-
-			});
-
+			maxRowLen[ii] = Math.max(maxRowLen[ii], ee.length);
+			tabularData[i][ii] = ee;
 		});
 
-		var hasHeader = headerCheckbox.get('checked');
-		var headerOutput = "";
-		var seperatorOutput = "";
+	});
 
-		maxRowLen.forEach(function( len ) {
-			var spacer;
-			spacer = Array(len + 1 + 2).join("-");
-			seperatorOutput += "|" + spacer;
+	var headerOutput = "";
+	var seperatorOutput = "";
 
-			spacer = Array(len + 1 + 2).join(" ");
-			headerOutput += "|" + spacer;
-		});
+	maxRowLen.forEach(function( len ) {
+		var spacer;
+		spacer = Array(len + 1 + 2).join("-");
+		seperatorOutput += "|" + spacer;
 
-		headerOutput += "| \n";
-		seperatorOutput += "| \n";
+		spacer = Array(len + 1 + 2).join(" ");
+		headerOutput += "|" + spacer;
+	});
 
-		if( hasHeader ) {
-			headerOutput = "";
-		}
+	headerOutput += "| \n";
+	seperatorOutput += "| \n";
 
-		var rowOutput = "";
-		var initHeader = true;
-		table.forEach(function( col, x ) {
-			maxRowLen.forEach(function( len, y ) {
-				var row = typeof col[y] == "undefined" ? "" : col[y];
-				var spacing = Array((len - row.length) + 1).join(" ");
+	if( hasHeader ) {
+		headerOutput = "";
+	}
 
-				if( hasHeader && initHeader ) {
-					headerOutput += "| " + row + spacing + " ";
-				} else {
-					rowOutput += "| " + row + spacing + " ";
-				}
-			});
+	var rowOutput = "";
+	var initHeader = true;
+	tabularData.forEach(function( col ) {
+		maxRowLen.forEach(function( len, y ) {
+			var row = typeof col[y] == "undefined" ? "" : col[y];
+			var spacing = Array((len - row.length) + 1).join(" ");
 
 			if( hasHeader && initHeader ) {
-				headerOutput += "| \n";
+				headerOutput += "| " + row + spacing + " ";
 			} else {
-				rowOutput += "| \n";
+				rowOutput += "| " + row + spacing + " ";
 			}
-
-			initHeader = false;
 		});
 
-		var finalOutput = headerOutput + seperatorOutput + rowOutput;
+		if( hasHeader && initHeader ) {
+			headerOutput += "| \n";
+		} else {
+			rowOutput += "| \n";
+		}
 
-		output.set('value', finalOutput);
-	};
-
-	input.addEvent('keyup', renderTable);
-	headerCheckbox.addEvent('change', renderTable);
-	delimiterMarker.addEvent('change', renderTable);
-
-	output.addEvent('click', function( e ) {
-		e.target.select();
+		initHeader = false;
 	});
-});
+
+	return headerOutput + seperatorOutput + rowOutput;
+};
