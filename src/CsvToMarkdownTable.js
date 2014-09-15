@@ -78,4 +78,4 @@ function csvToMarkdown( csvContent, delimiter, hasHeader ) {
 	});
 
 	return headerOutput + seperatorOutput + rowOutput;
-};
+}
