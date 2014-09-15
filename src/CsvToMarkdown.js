@@ -32,7 +32,6 @@ function csvToMarkdown( csvContent, delimiter, hasHeader ) {
 			maxRowLen[ii] = Math.max(maxRowLen[ii], ee.length);
 			tabularData[i][ii] = ee;
 		});
-
 	});
 
 	var headerOutput = "";
@@ -78,4 +77,8 @@ function csvToMarkdown( csvContent, delimiter, hasHeader ) {
 	});
 
 	return headerOutput + seperatorOutput + rowOutput;
+}
+
+if(typeof module != "undefined") {
+	module.exports = csvToMarkdown;
 }
