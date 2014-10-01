@@ -6,6 +6,8 @@ Requires **no external libraries**.
 
 Works in Node as well as in the browser.
 
+There is a live web interface for it [here](https://donatstudios.com/CsvToMarkdownTable).
+
 
 Example Use:
 
