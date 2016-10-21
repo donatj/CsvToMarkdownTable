@@ -2,12 +2,9 @@
 
 Simple JavaScript CSV to Markdown Table Converter
 
-Requires **no external libraries**.
+You can see it in action and play with the [live Example](https://donatstudios.com/CsvToMarkdownTable).
 
-Works in Node as well as in the browser.
-
-There is a live web interface for it [here](https://donatstudios.com/CsvToMarkdownTable).
-
+Requires **no external libraries**. Works in Node as well as in the browser.
 
 Example Use:
 
