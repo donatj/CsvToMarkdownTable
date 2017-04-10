@@ -2,7 +2,8 @@
   "name": "csv-to-markdown-table",
   "version": "0.1.0",
   "description": "JavaScript/Node.js Csv to Markdown Table Converter",
-  "main": "src/CsvToMarkdown.js",
+  "main": "./src/CsvToMarkdown.js",
+  "types": "./src/CsvToMarkdown.d.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/donatj/CsvToMarkdownTable/issues"
   },
-  "homepage": "https://github.com/donatj/CsvToMarkdownTable#readme"
+  "homepage": "https://github.com/donatj/CsvToMarkdownTable#readme",
+  "devDependencies": {
+    "@types/node": "^7.0.12",
+    "@types/requirejs": "^2.1.29"
+  }
 }
