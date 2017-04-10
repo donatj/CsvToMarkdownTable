@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/donatj/CsvToMarkdownTable/issues"
   },
-  "homepage": "https://github.com/donatj/CsvToMarkdownTable#readme",
+  "homepage": "https://donatstudios.com/CsvToMarkdownTable",
   "devDependencies": {
     "@types/node": "^7.0.12",
     "@types/requirejs": "^2.1.29"
