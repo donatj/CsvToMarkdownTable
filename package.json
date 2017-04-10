@@ -2,8 +2,8 @@
   "name": "csv-to-markdown-table",
   "version": "0.1.0",
   "description": "JavaScript/Node.js Csv to Markdown Table Converter",
-  "main": "./src/CsvToMarkdown.js",
-  "types": "./src/CsvToMarkdown.d.js",
+  "main": "./lib/CsvToMarkdown.js",
+  "types": "./lib/CsvToMarkdown.d.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

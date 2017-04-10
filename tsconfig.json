@@ -5,6 +5,7 @@
         "target": "es5",
         "noImplicitAny": true,
         "strictNullChecks": true,
-        "sourceMap": false
+        "sourceMap": false,
+        "outDir": "lib"
     }
 }
