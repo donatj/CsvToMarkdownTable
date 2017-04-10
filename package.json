@@ -1,6 +1,6 @@
 {
   "name": "csv-to-markdown-table",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "JavaScript/Node.js Csv to Markdown Table Converter",
   "main": "./lib/CsvToMarkdown.js",
   "types": "./lib/CsvToMarkdown.d.js",
