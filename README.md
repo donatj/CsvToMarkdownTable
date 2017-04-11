@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/csv-to-markdown-table.svg)](https://badge.fury.io/js/csv-to-markdown-table)
 [![Build Status](https://travis-ci.org/donatj/CsvToMarkdownTable.svg?branch=master)](https://travis-ci.org/donatj/CsvToMarkdownTable)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/donatj/csvtomarkdowntable/master/LICENSE.md)
 
 Simple JavaScript CSV to Markdown Table Converter
 
