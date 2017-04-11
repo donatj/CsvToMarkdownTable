@@ -2,7 +2,7 @@
     "compilerOptions": {
         "declaration": true,
         "alwaysStrict": true,
-        "target": "es5",
+        "target": "es3",
         "noImplicitAny": true,
         "strictNullChecks": true,
         "sourceMap": false,
