@@ -37,12 +37,10 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 	let seperatorOutput = "";
 
 	maxRowLen.forEach((len) => {
-		let spacer;
-		spacer = Array(len + 1 + 2).join("-");
-		seperatorOutput += "|" + spacer;
+		let sizer = Array(len + 1 + 2);
 
-		spacer = Array(len + 1 + 2).join(" ");
-		headerOutput += "|" + spacer;
+		seperatorOutput += "|" + sizer.join("-");
+		headerOutput += "|" + sizer.join(" ");
 	});
 
 	headerOutput += "| \n";
@@ -53,26 +51,23 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 	}
 
 	let rowOutput = "";
-	let initHeader = true;
-	tabularData.forEach((col) => {
+	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			let row = typeof col[y] == "undefined" ? "" : col[y];
 			let spacing = Array((len - row.length) + 1).join(" ");
 			let out = `| ${row}${spacing} `;
-			if (hasHeader && initHeader) {
+			if (hasHeader && i === 0) {
 				headerOutput += out;
 			} else {
 				rowOutput += out;
 			}
 		});
 
-		if (hasHeader && initHeader) {
+		if (hasHeader && i === 0) {
 			headerOutput += "| \n";
 		} else {
 			rowOutput += "| \n";
 		}
-
-		initHeader = false;
 	});
 
 	return headerOutput + seperatorOutput + rowOutput;
