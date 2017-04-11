@@ -1,10 +1,11 @@
 # CSV To Markdown Table
 
 [![npm version](https://badge.fury.io/js/csv-to-markdown-table.svg)](https://badge.fury.io/js/csv-to-markdown-table)
+[![Build Status](https://travis-ci.org/donatj/CsvToMarkdownTable.svg?branch=master)](https://travis-ci.org/donatj/CsvToMarkdownTable)
 
 Simple JavaScript CSV to Markdown Table Converter
 
-You can see it in action and play with the [live Example](https://donatstudios.com/CsvToMarkdownTable).
+You can see it in action and play with the [Live Example](https://donatstudios.com/CsvToMarkdownTable).
 
 Requires **no external libraries**. Works in Node as well as in the browser.
 
