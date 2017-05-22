@@ -11,17 +11,17 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 		csvContent = csvContent.replace(/\t/g, "    ");
 	}
 
-	let columns = csvContent.split("\n");
+	const columns = csvContent.split("\n");
 
-	let tabularData: string[][] = [];
-	let maxRowLen: number[] = [];
+	const tabularData: string[][] = [];
+	const maxRowLen: number[] = [];
 
 	columns.forEach((e, i) => {
 		if (typeof tabularData[i] == "undefined") {
 			tabularData[i] = [];
 		}
 
-		let row = e.split(delimiter);
+		const row = e.split(delimiter);
 
 		row.forEach((ee, ii) => {
 			if (typeof maxRowLen[ii] == "undefined") {
@@ -37,7 +37,7 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 	let seperatorOutput = "";
 
 	maxRowLen.forEach((len) => {
-		let sizer = Array(len + 1 + 2);
+		const sizer = Array(len + 1 + 2);
 
 		seperatorOutput += "|" + sizer.join("-");
 		headerOutput += "|" + sizer.join(" ");
@@ -53,9 +53,9 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 	let rowOutput = "";
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
-			let row = typeof col[y] == "undefined" ? "" : col[y];
-			let spacing = Array((len - row.length) + 1).join(" ");
-			let out = `| ${row}${spacing} `;
+			const row = typeof col[y] == "undefined" ? "" : col[y];
+			const spacing = Array((len - row.length) + 1).join(" ");
+			const out = `| ${row}${spacing} `;
 			if (hasHeader && i === 0) {
 				headerOutput += out;
 			} else {
