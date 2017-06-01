@@ -4,7 +4,13 @@
         "alwaysStrict": true,
         "target": "es3",
         "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
         "strictNullChecks": true,
+        "strict": true,
+        "alwaysStrict": true,
         "sourceMap": false,
         "outDir": "lib"
     }
