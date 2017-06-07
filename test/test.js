@@ -26,4 +26,9 @@ describe('csvToMarkdown', function () {
 		var result = csvToMarkdown("a;b;c;long value\nd;e;f", ";", false);
 		assert.equal(result, "|   |   |   |            | \n|---|---|---|------------| \n| a | b | c | long value | \n| d | e | f |            | \n");
 	});
+
+	it('should skip delimiters wrapped by quotes', function() {
+		var result = csvToMarkdown('"a, b, c, d",e', ",", false);
+		assert.equal(result, '|              |   | \n|--------------|---| \n| "a, b, c, d" | e | \n');
+	})
 });
