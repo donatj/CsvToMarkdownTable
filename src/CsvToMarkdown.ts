@@ -20,7 +20,7 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 		if (typeof tabularData[i] == "undefined") {
 			tabularData[i] = [];
 		}
-		var regex = new RegExp('(?!\\B"[^"]*)' + delimiter + '(?![^"]*"\\B)');
+		var regex = new RegExp(delimiter + '(?![^"]*"\\B)');
 		const row = e.split(regex);
 		row.forEach((ee, ii) => {
 			if (typeof maxRowLen[ii] == "undefined") {
