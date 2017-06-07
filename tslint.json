@@ -19,7 +19,6 @@
 		"one-variable-per-declaration": false,
 		"member-ordering": false,
 		"max-classes-per-file": false,
-		"no-bitwise": false,
-		"no-console": false
+		"no-bitwise": false
 	}
 }
