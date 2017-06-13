@@ -12,11 +12,6 @@ describe('csvToMarkdown', function () {
 		assert.equal(result, "| a | b | c | \n|---|---|---| \n");
 	});
 
-	it('should return a table with headers and no data', function () {
-		var result = csvToMarkdown("a\tb\tc", "\t", true);
-		assert.equal(result, "| a | b | c | \n|---|---|---| \n");
-	});
-
 	it('should convert tabs to 4 spaces to work on github', function () {
 		var result = csvToMarkdown("a\tb\tc", ";", false);
 		assert.equal(result, "|             | \n|-------------| \n| a    b    c | \n");
@@ -31,4 +26,9 @@ describe('csvToMarkdown', function () {
 		var result = csvToMarkdown('"a, b, c, d",e', ",", false);
 		assert.equal(result, '|              |   | \n|--------------|---| \n| "a, b, c, d" | e | \n');
 	})
+
+	it('should format correctly with double bar header style', function () {
+		var result = csvToMarkdown("a,b,c\nx,y,z", ",", true, true);
+		assert.equal(result, "|| a || b || c || \n| x | y | z | \n");
+	});
 });
