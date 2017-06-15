@@ -28,7 +28,12 @@ describe('csvToMarkdown', function () {
 	})
 
 	it('should format correctly with double bar header style', function () {
-		var result = csvToMarkdown("a,b,c\nx,y,z", ",", true, true);
-		assert.equal(result, "|| a || b || c || \n| x | y | z | \n");
+		var result = csvToMarkdown("1,2 - 4,34\nab,c,d\nab,c,d", ",", true, true);
+		assert.equal(result, "|| 1  || 2 - 4 || 34 || \n|  ab  | c      | d   | \n|  ab  | c      | d   | \n");
+	});
+
+	it('should format correctly with double bar header style', function () {
+		var result = csvToMarkdown("1,2 - 4,34\nab,c,d\nab,c,d", ",", false, true);
+		assert.equal(result, "||    ||       ||    || \n|  1   | 2 - 4  | 34  | \n|  ab  | c      | d   | \n|  ab  | c      | d   | \n");
 	});
 });
