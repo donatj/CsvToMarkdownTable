@@ -7,10 +7,8 @@
         "noImplicitThis": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noImplicitReturns": true,
         "strictNullChecks": true,
         "strict": true,
-        "alwaysStrict": true,
         "sourceMap": false,
         "outDir": "lib"
     }
