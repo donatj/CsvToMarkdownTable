@@ -54,14 +54,13 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			const row = typeof col[y] == "undefined" ? "" : col[y];
-			const headerWidth = useDoubleBarHeader ? 2 : 1;
-
-			let pre_space_count = (i > 0) ? headerWidth : 1;
+			let pre_space_count = 1;
 			let post_space_count = (len - row.length ) + 1;
 
 			if(useDoubleBarHeader) {
 				if(i > 0 ){
 					post_space_count++;
+					pre_space_count++;
 					if(y > 0){
 						pre_space_count--;
 					}
@@ -76,7 +75,6 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 			
 			const preSpacing = Array(pre_space_count + 1).join(" ");
 			const spacing = Array(post_space_count + 1).join(" ");
-
 			const out = `|${preSpacing}${row}${spacing}`;
 			
 			if (hasHeader && i === 0) {
