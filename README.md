@@ -29,3 +29,7 @@ Which displays in markdown as:
 | header1 | header2 | header3 | 
 |---------|---------|---------| 
 | Value1  | Value2  | Value3  | 
+
+## Notes
+
+A well done CSV to JIRA Confluence Wiki Markup fork is maintained here: https://github.com/terriann/CsvToPlainTextTable
