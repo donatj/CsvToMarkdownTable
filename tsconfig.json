@@ -10,6 +10,7 @@
         "strictNullChecks": true,
         "strict": true,
         "sourceMap": false,
-        "outDir": "lib"
+        "outDir": "lib",
+        "types": ["node"]
     }
 }
