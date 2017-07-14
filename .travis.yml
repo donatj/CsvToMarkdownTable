@@ -7,3 +7,6 @@ node_js:
 
 before_script:
   - node_modules/.bin/tslint -c tslint.json 'src/*.ts'
+
+after_success:
+  - npm run coveralls
