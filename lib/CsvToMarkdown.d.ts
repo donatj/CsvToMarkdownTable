@@ -6,4 +6,4 @@
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
-declare function csvToMarkdown(csvContent: string, delimiter?: string, hasHeader?: boolean): string;
+export declare function csvToMarkdown(csvContent: string, delimiter?: string, hasHeader?: boolean): string;

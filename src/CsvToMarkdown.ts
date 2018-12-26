@@ -6,7 +6,7 @@
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
-function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false) {
+export function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false) : string {
 	if (delimiter != "\t") {
 		csvContent = csvContent.replace(/\t/g, "    ");
 	}
@@ -69,7 +69,7 @@ function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: 
 		}
 	});
 
-	return headerOutput + seperatorOutput + rowOutput;
+	return `${headerOutput}${seperatorOutput}${rowOutput}`;
 }
 
 if (typeof module != "undefined") {
