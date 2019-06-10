@@ -1,9 +1,9 @@
 language: node_js
 node_js:
   - "node"
-  - "7"
-  - "6"
-  - "5"
+  - "12"
+  - "11"
+  - "10"
 
 before_script:
   - node_modules/.bin/tslint -c tslint.json 'src/*.ts'
