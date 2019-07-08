@@ -27,8 +27,8 @@ export function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasH
 				maxRowLen[ii] = 0;
 			}
 
-			// escape pipes
-			ee = ee.replace(/\|/g, "\\|");
+			// escape pipes and backslashes
+			ee = ee.replace(/(\||\\)/g, "\\$1");
 
 			maxRowLen[ii] = Math.max(maxRowLen[ii], ee.length);
 			tabularData[i][ii] = ee;
