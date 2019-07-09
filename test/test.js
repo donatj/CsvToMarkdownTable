@@ -58,4 +58,9 @@ describe('csvToMarkdown', function () {
 		var result = csvToMarkdown('"a, b, c, d",e', ",", false);
 		assert.equal(result, '|              |   | \n|--------------|---| \n| "a, b, c, d" | e | \n');
 	})
+
+	it('should escape pipes and back slashes', function(){
+		var result = csvToMarkdown('"a|b|c|d",e\\f\\g', ",", false);
+		assert.equal(result, '|              |         | \n|--------------|---------| \n| "a\\|b\\|c\\|d" | e\\\\f\\\\g | \n');
+	});
 });
