@@ -11,7 +11,7 @@ export function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasH
 		csvContent = csvContent.replace(/\t/g, "    ");
 	}
 
-	const columns = csvContent.split("\n");
+	const columns = csvContent.split(/\r?\n/);
 
 	const tabularData: string[][] = [];
 	const maxRowLen: number[] = [];

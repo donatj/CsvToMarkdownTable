@@ -13,6 +13,11 @@ describe('csvToMarkdown', function () {
 		assert.equal(result, "|   |   |   | \n|---|---|---| \n| a | b | c | \n");
 	});
 
+	it('should handle windows newlines gracefully', function () {
+		var result = csvToMarkdown("a\tb\r\nc\td\r\ne\tf\r\n", "\t", true);
+		assert.equal(result, "| a | b | \n|---|---| \n| c | d | \n| e | f | \n|   |   | \n");
+	});
+
 	it('should return a table with no headers', function () {
 		var result = csvToMarkdown("a\tb\tc", "\t", false);
 		assert.equal(result, "|   |   |   | \n|---|---|---| \n| a | b | c | \n");
