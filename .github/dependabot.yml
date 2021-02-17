@@ -5,11 +5,4 @@ updates:
   schedule:
     interval: monthly
     time: "11:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: "@types/node"
-    versions:
-    - "> 13.11.1"
-  - dependency-name: "@types/requirejs"
-    versions:
-    - "> 2.1.31"
+  open-pull-requests-limit: 3
