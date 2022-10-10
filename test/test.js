@@ -68,4 +68,14 @@ describe('csvToMarkdown', function () {
 		var result = csvToMarkdown('"a|b|c|d",e\\f\\g', ",", false);
 		assert.strictEqual(result, '|              |         | \n|--------------|---------| \n| "a\\|b\\|c\\|d" | e\\\\f\\\\g | \n');
 	});
+
+	it('should handle single values ending in the delimiter', function(){
+		var result = csvToMarkdown('"assd;"', ";", false);
+		assert.strictEqual(result, '|         | \n|---------| \n| "assd;" | \n');
+	});
+
+	it('should handle items that begin with word boundaries', function(){
+		var result = csvToMarkdown('"foo";"bar";"baz"\n"1";"2";"[foo -;- bar baz]"', ";", true);
+		assert.strictEqual(result, '| "foo" | "bar" | "baz"               | \n|-------|-------|---------------------| \n| "1"   | "2"   | "[foo -;- bar baz]" | \n');
+	});
 });
