@@ -12,13 +12,43 @@ You can see it in action and play with the [Live Example](https://donatstudios.c
 
 Requires **no external libraries**. Works in Node as well as in the browser.
 
-Example Use:
+## Install
 
-```js
-csvToMarkdown( "header1,header2,header3\nValue1,Value2,Value3", ",", true);
+```
+npm install csv-to-markdown-table
 ```
 
-Outputs:
+## Usage
+
+### Raw JS via Global
+
+```js
+console.log(
+  csvToMarkdown( "header1,header2,header3\nValue1,Value2,Value3", ",", true)
+);
+```
+
+### Node / npm
+
+```js
+const csvToMarkdown = require("csv-to-markdown-table");
+
+console.log(
+	csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+);
+```
+
+### TypeScript
+
+```ts
+import csvToMarkdown from "csv-to-markdown-table";
+
+console.log(
+  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+);
+```
+
+#### Outputs:
 
 ```
 | header1 | header2 | header3 | 
@@ -31,7 +61,3 @@ Which displays in markdown as:
 | header1 | header2 | header3 | 
 |---------|---------|---------| 
 | Value1  | Value2  | Value3  | 
-
-## Notes
-
-A well done CSV to JIRA Confluence Wiki Markup fork is maintained here: https://github.com/terriann/CsvToPlainTextTable
