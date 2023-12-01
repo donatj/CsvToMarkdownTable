@@ -32,15 +32,12 @@ for (let i = 0; i < args.length; i++) {
 	} else if (arg === '--headers') {
 		headers = true;
 	} else if (arg === '--help') {
-		const scriptName = path.basename(process.argv[1]);
-		console.log(`Usage: ${scriptName} [options]`);
-		console.log("Options:");
-		console.log("  --delim [delimiter]  Specify a custom delimiter. Default is tab character. Any valid string. Special cases are provided for :tab, :comma, :semicolon.");
-		console.log("  --headers            Use the first line as a header.");
-		console.log("  --help               Display this help message and exit.");
+		displayHelp();
 		return;
 	} else {
 		console.error(`Unrecognized argument: ${arg}`);
+		displayHelp();
+		process.exit(1);
 		return;
 	}
 }
@@ -96,4 +93,13 @@ function getDelimiterName(delim) {
 	}
 
 	return stringify ? JSON.stringify(delimName) : delimName;
+}
+
+function displayHelp() {
+	const scriptName = path.basename(process.argv[1]);
+	console.log(`Usage: ${scriptName} [options]`);
+	console.log("Options:");
+	console.log("  --delim [delimiter]  Specify a custom delimiter. Default is tab character. Any valid string. Special cases are provided for :tab, :comma, :semicolon.");
+	console.log("  --headers            Use the first line as a header.");
+	console.log("  --help               Display this help message and exit.");
 }
