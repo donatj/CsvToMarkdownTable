@@ -28,6 +28,7 @@ jobs:
     - run: npm run cover
 
     - name: Coveralls
-      uses: coverallsapp/github-action@master
+      if: matrix.node-version == '20.x'
+      uses: coverallsapp/github-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
