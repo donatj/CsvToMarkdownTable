@@ -13,11 +13,37 @@ Requires **no external libraries**. Works in Node as well as in the browser.
 
 ## Install
 
-```
+```bash
 npm install csv-to-markdown-table
 ```
 
 ## Usage
+
+### CLI
+
+This package also includes a CLI tool. You can install it globally with:
+
+```bash
+npm install -g csv-to-markdown-table
+```
+
+Then you can use it like so:
+
+```bash
+$ csvtomarkdown --help
+Usage: csvtomarkdown [options]
+// … help output
+
+$ csvtomarkdown --delimiter ',' --headers < example.csv
+| cats | dogs | fish | 
+|------|------|------| 
+| 1    | 2    | 3    | 
+| 4    | 5    | 6    |
+$ csvtomarkdown
+Reading from stdin... (press Ctrl+D at the start of a line to finish)
+CSV Delimiter: \t (tab) Headers: false
+[interactive input]
+```
 
 ### Raw JS via Global
 
@@ -49,7 +75,7 @@ console.log(
 
 #### Outputs:
 
-```
+```markdown
 | header1 | header2 | header3 | 
 |---------|---------|---------| 
 | Value1  | Value2  | Value3  | 
