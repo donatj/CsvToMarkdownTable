@@ -58,7 +58,7 @@ process.stdin.on('readable', () => {
 });
 
 process.stdin.on('end', () => {
-	process.stdout.write(CsvToMarkdown(data, delim, headers));
+	process.stdout.write(CsvToMarkdown(data.trim(), delim, headers));
 });
 
 function getDelimiterName(delim) {
