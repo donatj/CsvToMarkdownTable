@@ -30,16 +30,16 @@ npm install -g csv-to-markdown-table
 Then you can use it like so:
 
 ```bash
-$ csvtomarkdown --help
-Usage: csvtomarkdown [options]
+$ csv-to-markdown-table --help
+Usage: csv-to-markdown-table [options]
 // … help output
 
-$ csvtomarkdown --delimiter ',' --headers < example.csv
+$ csv-to-markdown-table --delimiter ',' --headers < example.csv
 | cats | dogs | fish | 
 |------|------|------| 
 | 1    | 2    | 3    | 
 | 4    | 5    | 6    |
-$ csvtomarkdown
+$ csv-to-markdown-table
 Reading from stdin... (press Ctrl+D at the start of a line to finish)
 CSV Delimiter: \t (tab) Headers: false
 [interactive input]
