@@ -1,3 +1,7 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+
 [*.{js,ts,html}]
 charset = utf-8
 indent_style = tab
