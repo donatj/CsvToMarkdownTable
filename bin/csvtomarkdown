@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+
+const CsvToMarkdown = require('../lib/CsvToMarkdown.js');
+const path = require('path');
+
+// Simple flag parser
+const args = process.argv.slice(2);
+let delim = '\t'; // Default delimiter
+let headers = false;
+
+for (let i = 0; i < args.length; i++) {
+	const arg = args[i];
+
+	if (arg === '--delim') {
+		if (i + 1 < args.length) { // Check if there is a next argument
+			delim = args[i + 1];
+
+			// Special cases for delimiter
+			if (delim === ':tab') {
+				delim = '\t';
+			} else if (delim === ':comma') {
+				delim = ',';
+			} else if (delim === ':semicolon') {
+				delim = ';';
+			}
+
+			i++; // Skip next argument as it's part of --delim
+		} else {
+			console.error("No delimiter specified after --delim.");
+			return;
+		}
+	} else if (arg === '--headers') {
+		headers = true;
+	} else if (arg === '--help') {
+		const scriptName = path.basename(process.argv[1]);
+		console.log(`Usage: ${scriptName} [options]`);
+		console.log("Options:");
+		console.log("  --delim [delimiter]  Specify a custom delimiter. Default is tab character. Any valid string. Special cases are provided for :tab, :comma, :semicolon.");
+		console.log("  --headers            Use the first line as a header.");
+		console.log("  --help               Display this help message and exit.");
+		return;
+	} else {
+		console.error(`Unrecognized argument: ${arg}`);
+		return;
+	}
+}
+
+
+if (process.stdin.isTTY) {
+	console.log("Reading from stdin... (press Ctrl+D at the start of a line to finish)");
+	console.log("CSV Delimiter:", getDelimiterName(delim), "Headers:", headers);
+}
+
+let data = '';
+process.stdin.on('readable', () => {
+	let chunk;
+	// Keep reading data until there's none left.
+	while ((chunk = process.stdin.read()) !== null) {
+		data += chunk;
+	}
+});
+
+process.stdin.on('end', () => {
+	process.stdout.write(CsvToMarkdown(data, delim, headers));
+});
+
+function getDelimiterName(delim) {
+	const charMap = {
+		'\n': '\\n (newline)',
+		'\t': '\\t (tab)',
+		'\r': '\\r (carriage return)',
+		'\0': '\\0 (null character)',
+		' ': '(space)',
+		'\v': '\\v (vertical tab)',
+		'\f': '\\f (form feed)',
+		'\x1C': '\\x1C (file separator)',
+		'\x1D': '\\x1D (group separator)',
+		'\x1E': '\\x1E (record separator)',
+		'\x1F': '\\x1F (unit separator)'
+		// Add more specific characters as needed
+	};
+
+	let delimName = '';
+
+	let stringify = true;
+	for (const char of delim) {
+		if (charMap.hasOwnProperty(char)) {
+			delimName += charMap[char];
+			stringify = false;
+		} else if (char.charCodeAt(0) < 32 || char.charCodeAt(0) > 126) {
+			delimName += `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`;
+			stringify = false;
+		} else {
+			delimName += char;
+		}
+	}
+
+	return stringify ? JSON.stringify(delimName) : delimName;
+}
