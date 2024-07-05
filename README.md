@@ -1,3 +1,3 @@
-### Speacial Thanks Project forked from ```donatj/CsvToMarkdownTable```
+#### Speacial Thanks to ```donatj/CsvToMarkdownTable```; 
 
-#### Code adjusted for pages deployment.
+### Forked from and adjusted for pages deployment.
