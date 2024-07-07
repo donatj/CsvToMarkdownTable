@@ -16,11 +16,13 @@ export default function csvToMarkdown(csvContent: string, delimiter: string = "\
 	const tabularData: string[][] = [];
 	const maxRowLen: number[] = [];
 
+	const regsafeDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const regex = new RegExp(`${regsafeDelimiter}(?![^"]*"(?:$|${regsafeDelimiter}))`);
+
 	columns.forEach((e, i) => {
 		if (typeof tabularData[i] == "undefined") {
 			tabularData[i] = [];
 		}
-		const regex = new RegExp(`${delimiter}(?![^"]*"(?:$|${delimiter}))`);
 		const row = e.split(regex);
 		row.forEach((ee, ii) => {
 			if (typeof maxRowLen[ii] == "undefined") {
