@@ -78,4 +78,12 @@ describe('csvToMarkdown', function () {
 		var result = csvToMarkdown('"foo";"bar";"baz"\n"1";"2";"[foo -;- bar baz]"', ";", true);
 		assert.strictEqual(result, '| "foo" | "bar" | "baz"               | \n|-------|-------|---------------------| \n| "1"   | "2"   | "[foo -;- bar baz]" | \n');
 	});
+
+	it('should handle delimiters that are regex special characters', function () {
+		var delimiters = ['[', ']', '\\', '/', '^', '$', '.', '|', '?', '*', '+', '(', ')', '{', '}', '-'];
+		delimiters.forEach(function (delimiter) {
+			var result = csvToMarkdown('a' + delimiter + 'b' + delimiter + 'c', delimiter, false);
+			assert.strictEqual(result, '|   |   |   | \n|---|---|---| \n| a | b | c | \n', 'Failed for delimiter: "' + delimiter + '"');
+		});
+	});
 });
