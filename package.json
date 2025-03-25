@@ -32,7 +32,7 @@
   },
   "homepage": "https://donatstudios.com/CsvToMarkdownTable",
   "devDependencies": {
-    "@types/node": "^13.9.5",
+    "@types/node": "^22.13.13",
     "@types/requirejs": "^2.1.31",
     "coveralls": "^3.1.1",
     "istanbul": "^0.4.5",
