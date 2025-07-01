@@ -4,8 +4,7 @@ updates:
   directory: "/"
   schedule:
     interval: monthly
-    time: "11:00"
-  open-pull-requests-limit: 3
+  versioning-strategy: increase
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
