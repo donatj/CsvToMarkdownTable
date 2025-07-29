@@ -22,7 +22,7 @@
 		"cover": "jest --coverage",
 		"clean": "rm -rf lib && rm -rf coverage",
 		"build": "rollup -c rollup.config.mjs",
-		"build:types": "tsc --emitDeclarationOnly --declaration --declarationDir lib && cp lib/src/CsvToMarkdown.d.ts lib/ && rm -rf lib/src",
+		"build:types": "tsc --emitDeclarationOnly --declaration --declarationDir lib",
 		"build:all": "npm run build && npm run build:types",
 		"coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
 	},
