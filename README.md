@@ -45,21 +45,34 @@ CSV Delimiter: \t (tab) Headers: false
 [interactive input]
 ```
 
-### Raw JS via Global
+### Browser via CDN (UMD)
 
-```js
-console.log(
-  csvToMarkdown( "header1,header2,header3\nValue1,Value2,Value3", ",", true)
-);
+```html
+<script src="https://unpkg.com/csv-to-markdown-table"></script>
+<script>
+  console.log(
+    csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  );
+</script>
 ```
 
-### Node / npm
+### Node.js with CommonJS (require)
 
 ```js
 const csvToMarkdown = require("csv-to-markdown-table");
 
 console.log(
-	csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+);
+```
+
+### Node.js with ES Modules (import)
+
+```js
+import csvToMarkdown from "csv-to-markdown-table";
+
+console.log(
+  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
 );
 ```
 
@@ -86,3 +99,24 @@ Which displays in markdown as:
 | header1 | header2 | header3 | 
 |---------|---------|---------| 
 | Value1  | Value2  | Value3  | 
+
+
+## Distribution Formats
+
+This package is distributed in multiple formats:
+
+- **UMD**: Universal Module Definition for browsers and legacy environments (includes csvToMarkdown global variable when loaded in a browser)
+  - `lib/CsvToMarkdown.js` (unminified)
+  - `lib/CsvToMarkdown.min.js` (minified)
+- **ESM**: ES Modules for modern JavaScript environments
+  - `lib/CsvToMarkdown.mjs`
+- **CJS**: CommonJS for Node.js
+  - `lib/CsvToMarkdown.cjs`
+
+The package.json is configured with the appropriate fields to ensure the correct format is used in each environment:
+
+- `main`: Points to the CommonJS build
+- `module`: Points to the ESM build
+- `browser`: Points to the UMD build
+- `unpkg`: Points to the minified UMD build
+- `exports`: Provides conditional exports for different environments
