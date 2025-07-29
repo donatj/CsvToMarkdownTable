@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const CsvToMarkdown = require('../lib/CsvToMarkdown.js');
-const path = require('path');
+import CsvToMarkdown from '../lib/CsvToMarkdown.mjs';
+import path from 'path';
 
 // Simple flag parser
 const args = process.argv.slice(2);
@@ -27,18 +27,17 @@ for (let i = 0; i < args.length; i++) {
 			i++; // Skip next argument as it's part of --delim
 		} else {
 			console.error("No delimiter specified after --delim.");
-			return;
+			process.exit(1);
 		}
 	} else if (arg === '--headers') {
 		headers = true;
 	} else if (arg === '--help') {
 		displayHelp();
-		return;
+		process.exit(0);
 	} else {
 		console.error(`Unrecognized argument: ${arg}`);
 		displayHelp();
 		process.exit(1);
-		return;
 	}
 }
 
