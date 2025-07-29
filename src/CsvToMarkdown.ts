@@ -76,7 +76,3 @@ export default function csvToMarkdown(csvContent: string, delimiter: string = "\
 
 	return `${headerOutput}${seperatorOutput}${rowOutput}`;
 }
-
-if (typeof module != "undefined") {
-	module.exports = csvToMarkdown;
-}

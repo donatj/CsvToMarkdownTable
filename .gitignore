@@ -2,3 +2,5 @@
 /node_modules
 /yarn.lock
 /coverage
+/test/test.d.ts
+/lib/test
