@@ -54,7 +54,6 @@
 		"@types/requirejs": "^2.1.31",
 		"@typescript-eslint/eslint-plugin": "^8.38.0",
 		"@typescript-eslint/parser": "^8.38.0",
-		"coveralls": "^3.1.1",
 		"eslint": "^9.32.0",
 		"jest": "^30.0.5",
 		"jest-environment-node": "^30.0.5",
