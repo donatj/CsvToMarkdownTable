@@ -10,7 +10,8 @@
 		".": {
 			"import": "./lib/CsvToMarkdown.mjs",
 			"require": "./lib/CsvToMarkdown.cjs",
-			"browser": "./lib/CsvToMarkdown.js"
+			"browser": "./lib/CsvToMarkdown.js",
+			"types": "./lib/CsvToMarkdown.d.ts"
 		}
 	},
 	"bin": "./bin/csv-to-markdown-table",
