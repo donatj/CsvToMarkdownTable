@@ -15,7 +15,7 @@
 		}
 	},
 	"bin": "./bin/csv-to-markdown-table",
-	"version": "1.6.2",
+	"version": "1.6.3",
 	"types": "./lib/CsvToMarkdown.d.ts",
 	"scripts": {
 		"test": "jest",
