@@ -1,12 +1,16 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: monthly
-  versioning-strategy: increase
-- package-ecosystem: "github-actions"
-  directory: "/"
-  schedule:
-    interval: monthly
-    time: "11:00"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+    versioning-strategy: increase
+    groups:
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
