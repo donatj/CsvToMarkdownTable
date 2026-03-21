@@ -14,7 +14,7 @@
 		"noUnusedLocals": true,
 		"strictNullChecks": true,
 		"esModuleInterop": true,
-		"sourceMap": false,
+		"sourceMap": true,
 		"types": [
 			"node",
 			"jest"
