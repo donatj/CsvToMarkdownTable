@@ -1,10 +1,30 @@
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 const cliPath = path.resolve(__dirname, "../bin/csv-to-markdown-table");
+
+// Helper to run CLI with stdin input
+const execFileWithInput = (file: string, args: string[], input: string): Promise<{ stdout: string; stderr: string }> => {
+	return new Promise((resolve, reject) => {
+		const child = execFile(file, args, (error, stdout, stderr) => {
+			if (error) {
+				const err = error as NodeJS.ErrnoException & { stdout: string; stderr: string };
+				err.stdout = stdout as string;
+				err.stderr = stderr as string;
+				reject(err);
+				return;
+			}
+			resolve({ stdout: stdout as string, stderr: stderr as string });
+		});
+		if (child.stdin) {
+			child.stdin.write(input);
+			child.stdin.end();
+		}
+	});
+};
 
 // Helper function to create a temporary CSV file
 const createTempCsvFile = (content: string): string => {
@@ -23,7 +43,7 @@ const cleanupTempFiles = (filePath: string): void => {
 describe("CLI Tool Tests", () => {
 	// Test help command
 	test("should display help information when --help flag is used", async () => {
-		const { stdout, stderr } = await execAsync(`${cliPath} --help`);
+		const { stdout, stderr } = await execFileAsync(cliPath, ["--help"]);
 
 		expect(stderr).toBe("");
 		expect(stdout).toContain("Usage:");
@@ -36,7 +56,7 @@ describe("CLI Tool Tests", () => {
 	// Test invalid argument
 	test("should display error and help when invalid argument is provided", async () => {
 		try {
-			await execAsync(`${cliPath} --invalid-arg`);
+			await execFileAsync(cliPath, ["--invalid-arg"]);
 			// If we get here, the command didn't fail as expected
 			fail("Command should have failed with non-zero exit code");
 		} catch (error: any) {
@@ -48,7 +68,7 @@ describe("CLI Tool Tests", () => {
 	// Test missing delimiter after --delim flag
 	test("should display error when no delimiter is specified after --delim", async () => {
 		try {
-			await execAsync(`${cliPath} --delim`);
+			await execFileAsync(cliPath, ["--delim"]);
 			fail("Command should have failed with non-zero exit code");
 		} catch (error: any) {
 			expect(error.stderr).toContain("No delimiter specified after --delim");
@@ -61,7 +81,8 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim ,`);
+			const csvInput = fs.readFileSync(tempFilePath, "utf8");
+			const { stdout, stderr } = await execFileWithInput(cliPath, ["--delim", ","], csvInput);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -80,7 +101,8 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim , --headers`);
+			const csvInput = fs.readFileSync(tempFilePath, "utf8");
+			const { stdout, stderr } = await execFileWithInput(cliPath, ["--delim", ",", "--headers"], csvInput);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("| a | b | c |");
@@ -102,7 +124,8 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :tab`);
+			const csvInput = fs.readFileSync(tempFilePath, "utf8");
+			const { stdout, stderr } = await execFileWithInput(cliPath, ["--delim", ":tab"], csvInput);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -121,7 +144,12 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :comma`);
+			const csvInput = fs.readFileSync(tempFilePath, "utf8");
+			const { stdout, stderr } = await execFileWithInput(
+				cliPath,
+				["--delim", ":comma"],
+				csvInput
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -140,7 +168,12 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :semicolon`);
+			const csvInput = fs.readFileSync(tempFilePath, "utf8");
+			const { stdout, stderr } = await execFileWithInput(
+				cliPath,
+				["--delim", ":semicolon"],
+				csvInput
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
