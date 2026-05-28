@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x, 22.x, 24.x, 25.x]
+        node-version: [20.x, 22.x, 24.x, 26.x]
 
     steps:
     - uses: actions/checkout@v6
@@ -28,6 +28,14 @@ jobs:
     - run: npm run build:all
     - run: npm run lint
     - run: npm test
+
+    - name: Check generated lib is clean
+      run: |
+        if ! git diff --quiet -- ./lib; then
+          git diff -- ./lib
+          echo "::error::./lib has uncommitted changes after build"
+          exit 1
+        fi
 
     - run: npm run cover
 
