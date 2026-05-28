@@ -2,16 +2,17 @@
 	"name": "csv-to-markdown-table",
 	"description": "JavaScript/Node.js Csv to Markdown Table Converter",
 	"type": "module",
-	"main": "./lib/CsvToMarkdown.js",
+	"main": "./lib/CsvToMarkdown.cjs",
 	"module": "./lib/CsvToMarkdown.mjs",
 	"browser": "./lib/CsvToMarkdown.js",
 	"unpkg": "./lib/CsvToMarkdown.min.js",
 	"exports": {
 		".": {
+			"types": "./lib/CsvToMarkdown.d.ts",
+			"browser": "./lib/CsvToMarkdown.js",
 			"import": "./lib/CsvToMarkdown.mjs",
 			"require": "./lib/CsvToMarkdown.cjs",
-			"browser": "./lib/CsvToMarkdown.js",
-			"types": "./lib/CsvToMarkdown.d.ts"
+			"default": "./lib/CsvToMarkdown.mjs",
 		}
 	},
 	"bin": "./bin/csv-to-markdown-table",
