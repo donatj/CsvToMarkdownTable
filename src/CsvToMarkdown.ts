@@ -5,6 +5,8 @@
  * This notice may not be removed or altered from any source distribution.
  */
 
+import {allValues, parse, separator} from "csv-walker";
+
 /**
  * Converts CSV to Markdown Table
  *
@@ -13,7 +15,6 @@
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
-import {allValues, parse, separator} from "csv-walker";
 
 export default function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false): string {
 	const tabularData = allValues(parse(csvContent, separator(delimiter)));
