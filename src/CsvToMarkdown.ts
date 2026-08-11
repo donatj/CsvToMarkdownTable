@@ -5,7 +5,7 @@
  * This notice may not be removed or altered from any source distribution.
  */
 
-import {allValues, parse, separator} from "csv-walker";
+import { allValues, parse, separator } from "csv-walker";
 
 /**
  * Converts CSV to Markdown Table
@@ -16,7 +16,11 @@ import {allValues, parse, separator} from "csv-walker";
  * @returns {string}
  */
 
-export default function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false): string {
+export default function csvToMarkdown(
+	csvContent: string,
+	delimiter: string = "\t",
+	hasHeader: boolean = false,
+): string {
 	const tabularData = allValues(parse(csvContent, separator(delimiter)));
 	const maxRowLen: number[] = [];
 
@@ -60,7 +64,7 @@ export default function csvToMarkdown(csvContent: string, delimiter: string = "\
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			const row = typeof col[y] == "undefined" ? "" : col[y];
-			const spacing = Array((len - row.length) + 1).join(" ");
+			const spacing = Array(len - row.length + 1).join(" ");
 			const out = `| ${row}${spacing} `;
 			if (hasHeader && i === 0) {
 				headerOutput += out;
