@@ -35,6 +35,25 @@ function runCli(args: string[], input: string = ""): Promise<CliResult> {
 	});
 }
 
+function expectedTableOutput(lines: string[]): string {
+	return lines.map((line) => line + " ").join("\n") + "\n";
+}
+
+const tableOutput = expectedTableOutput([
+	"|   |   |   |",
+	"|---|---|---|",
+	"| a | b | c |",
+	"| 1 | 2 | 3 |",
+	"| 4 | 5 | 6 |",
+]);
+
+const headerTableOutput = expectedTableOutput([
+	"| a | b | c |",
+	"|---|---|---|",
+	"| 1 | 2 | 3 |",
+	"| 4 | 5 | 6 |",
+]);
+
 describe("CLI Tool Tests", () => {
 	test("should display help information when --help flag is used", async () => {
 		const { exitCode, stderr, stdout } = await runCli(["--help"]);
@@ -71,11 +90,7 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toContain("|   |   |   |");
-		expect(stdout).toContain("|---|---|---|");
-		expect(stdout).toContain("| a | b | c |");
-		expect(stdout).toContain("| 1 | 2 | 3 |");
-		expect(stdout).toContain("| 4 | 5 | 6 |");
+		expect(stdout).toBe(tableOutput);
 	});
 
 	test("should use first row as headers when --headers flag is used", async () => {
@@ -86,15 +101,7 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toContain("| a | b | c |");
-		expect(stdout).toContain("|---|---|---|");
-		expect(stdout).toContain("| 1 | 2 | 3 |");
-		expect(stdout).toContain("| 4 | 5 | 6 |");
-
-		const lines = stdout.trim().split("\n");
-		expect(lines.filter((line) => line.includes("| a | b | c |")).length).toBe(
-			1,
-		);
+		expect(stdout).toBe(headerTableOutput);
 	});
 
 	test("should handle special delimiter :tab correctly", async () => {
@@ -105,11 +112,7 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toContain("|   |   |   |");
-		expect(stdout).toContain("|---|---|---|");
-		expect(stdout).toContain("| a | b | c |");
-		expect(stdout).toContain("| 1 | 2 | 3 |");
-		expect(stdout).toContain("| 4 | 5 | 6 |");
+		expect(stdout).toBe(tableOutput);
 	});
 
 	test("should handle special delimiter :comma correctly", async () => {
@@ -120,11 +123,7 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toContain("|   |   |   |");
-		expect(stdout).toContain("|---|---|---|");
-		expect(stdout).toContain("| a | b | c |");
-		expect(stdout).toContain("| 1 | 2 | 3 |");
-		expect(stdout).toContain("| 4 | 5 | 6 |");
+		expect(stdout).toBe(tableOutput);
 	});
 
 	test("should handle special delimiter :semicolon correctly", async () => {
@@ -135,10 +134,6 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toContain("|   |   |   |");
-		expect(stdout).toContain("|---|---|---|");
-		expect(stdout).toContain("| a | b | c |");
-		expect(stdout).toContain("| 1 | 2 | 3 |");
-		expect(stdout).toContain("| 4 | 5 | 6 |");
+		expect(stdout).toBe(tableOutput);
 	});
 });
