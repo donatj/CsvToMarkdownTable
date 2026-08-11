@@ -49,6 +49,7 @@ export default [
 	// ESM build (for modern JS imports)
 	{
 		input,
+		external: ['csv-walker'],
 		output : {
 			file  : 'lib/CsvToMarkdown.mjs',
 			format: 'es',
@@ -62,6 +63,7 @@ export default [
 	// CommonJS build (for Node.js require)
 	{
 		input,
+		external: ['csv-walker'],
 		output : {
 			file   : 'lib/CsvToMarkdown.cjs',
 			format : 'cjs',
