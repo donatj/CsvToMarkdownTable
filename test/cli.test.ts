@@ -2,8 +2,10 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
 const execAsync = promisify(exec);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cliPath = path.resolve(__dirname, "../bin/csv-to-markdown-table");
 
 // Helper function to create a temporary CSV file

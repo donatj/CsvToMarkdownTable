@@ -98,7 +98,7 @@ function displayHelp() {
 	const scriptName = path.basename(process.argv[1]);
 	console.log(`Usage: ${scriptName} [options]`);
 	console.log("Options:");
-	console.log("  --delim [delimiter]  Specify a custom delimiter. Default is tab character. Any valid string. Special cases are provided for :tab, :comma, :semicolon.");
+	console.log("  --delim [delimiter]  Specify a one-character delimiter. Default is tab. Special cases: :tab, :comma, :semicolon.");
 	console.log("  --headers            Use the first line as a header.");
 	console.log("  --help               Display this help message and exit.");
 }

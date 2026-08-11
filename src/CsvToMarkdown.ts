@@ -9,40 +9,34 @@
  * Converts CSV to Markdown Table
  *
  * @param {string} csvContent - The string content of the CSV
- * @param {string} delimiter - The character(s) to use as the CSV column delimiter
+ * @param {string} delimiter - The character to use as the CSV column delimiter
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
+import {allValues, parse, separator} from "csv-walker";
+
 export default function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false): string {
-	if (delimiter != "\t") {
-		csvContent = csvContent.replace(/\t/g, "    ");
-	}
-
-	const columns = csvContent.split(/\r?\n/);
-
-	const tabularData: string[][] = [];
+	const tabularData = allValues(parse(csvContent, separator(delimiter)));
 	const maxRowLen: number[] = [];
 
-	const regsafeDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	const regex = new RegExp(`${regsafeDelimiter}(?![^"]*"(?:$|${regsafeDelimiter}))`);
+	for (const values of tabularData) {
+		values.forEach((column, index) => {
+			let value = column;
 
-	columns.forEach((e, i) => {
-		if (typeof tabularData[i] == "undefined") {
-			tabularData[i] = [];
-		}
-		const row = e.split(regex);
-		row.forEach((ee, ii) => {
-			if (typeof maxRowLen[ii] == "undefined") {
-				maxRowLen[ii] = 0;
+			if (delimiter != "\t") {
+				value = value.replace(/\t/g, "    ");
 			}
 
-			// escape pipes and backslashes
-			ee = ee.replace(/(\||\\)/g, "\\$1");
-
-			maxRowLen[ii] = Math.max(maxRowLen[ii], ee.length);
-			tabularData[i][ii] = ee;
+			value = value.replace(/\r\n?|\n/g, "<br>").replace(/(\||\\)/g, "\\$1");
+			maxRowLen[index] = Math.max(maxRowLen[index] ?? 0, value.length);
+			values[index] = value;
 		});
-	});
+	}
+
+	if (tabularData.length === 0) {
+		tabularData.push([""]);
+		maxRowLen.push(0);
+	}
 
 	let headerOutput = "";
 	let seperatorOutput = "";

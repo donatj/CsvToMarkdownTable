@@ -1,4 +1,4 @@
-import csvToMarkdown from "../src/CsvToMarkdown";
+import csvToMarkdown from "../src/CsvToMarkdown.js";
 
 describe("csvToMarkdown", () => {
 
@@ -14,7 +14,7 @@ describe("csvToMarkdown", () => {
 
 	test("should handle windows newlines gracefully", () => {
 		const result = csvToMarkdown("a\tb\r\nc\td\r\ne\tf\r\n", "\t", true);
-		expect(result).toBe("| a | b | \n|---|---| \n| c | d | \n| e | f | \n|   |   | \n");
+		expect(result).toBe("| a | b | \n|---|---| \n| c | d | \n| e | f | \n");
 	});
 
 	test("should return a table with no headers", () => {
@@ -35,11 +35,15 @@ describe("csvToMarkdown", () => {
 		});
 	});
 
-	test("should contain the separtor when it is wrapped in quotes", () => {
+	test("should reject multi-character delimiters", () => {
+		expect(() => csvToMarkdown("a||b", "||")).toThrow(TypeError);
+	});
+
+	test("should parse separators wrapped in quotes", () => {
 		const cases = [["a\t\"b\tc\"\td", "\t"], ["a,\"b,c\",d", ","], ["a;\"b;c\";d", ";"]];
 		cases.forEach((entry) => {
 			const result = csvToMarkdown(entry[0], entry[1], false);
-			expect(result).toBe("|   |       |   | \n|---|-------|---| \n| a | \"b" + entry[1] + "c\" | d | \n");
+			expect(result).toBe("|   |     |   | \n|---|-----|---| \n| a | b" + entry[1] + "c | d | \n");
 		});
 	});
 
@@ -58,24 +62,34 @@ describe("csvToMarkdown", () => {
 		expect(result).toBe("|   |   |   |            | \n|---|---|---|------------| \n| a | b | c | long value | \n| d | e | f |            | \n");
 	});
 
-	test("should skip delimiters wrapped by quotes", () => {
+	test("should parse delimiters wrapped by quotes", () => {
 		const result = csvToMarkdown("\"a, b, c, d\",e", ",", false);
-		expect(result).toBe("|              |   | \n|--------------|---| \n| \"a, b, c, d\" | e | \n");
+		expect(result).toBe("|            |   | \n|------------|---| \n| a, b, c, d | e | \n");
 	});
 
 	test("should escape pipes and back slashes", () => {
 		const result = csvToMarkdown("\"a|b|c|d\",e\\f\\g", ",", false);
-		expect(result).toBe("|              |         | \n|--------------|---------| \n| \"a\\|b\\|c\\|d\" | e\\\\f\\\\g | \n");
+		expect(result).toBe("|            |         | \n|------------|---------| \n| a\\|b\\|c\\|d | e\\\\f\\\\g | \n");
 	});
 
 	test("should handle single values ending in the delimiter", () => {
 		const result = csvToMarkdown("\"assd;\"", ";", false);
-		expect(result).toBe("|         | \n|---------| \n| \"assd;\" | \n");
+		expect(result).toBe("|       | \n|-------| \n| assd; | \n");
 	});
 
 	test("should handle items that begin with word boundaries", () => {
 		const result = csvToMarkdown("\"foo\";\"bar\";\"baz\"\n\"1\";\"2\";\"[foo -;- bar baz]\"", ";", true);
-		expect(result).toBe("| \"foo\" | \"bar\" | \"baz\"               | \n|-------|-------|---------------------| \n| \"1\"   | \"2\"   | \"[foo -;- bar baz]\" | \n");
+		expect(result).toBe("| foo | bar | baz               | \n|-----|-----|-------------------| \n| 1   | 2   | [foo -;- bar baz] | \n");
+	});
+
+	test("should parse doubled enclosures", () => {
+		const result = csvToMarkdown("name,quote\nAda,\"said \"\"hi\"\"\"", ",", true);
+		expect(result).toBe("| name | quote     | \n|------|-----------| \n| Ada  | said \"hi\" | \n");
+	});
+
+	test("should render newlines in quoted fields", () => {
+		const result = csvToMarkdown("name,quote\nAda,\"line one\nline two\"", ",", true);
+		expect(result).toBe("| name | quote                | \n|------|----------------------| \n| Ada  | line one<br>line two | \n");
 	});
 
 	test("should handle delimiters that are regex special characters", () => {
