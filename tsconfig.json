@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"target": "es2018",
 		"module": "esnext",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
+		"rootDir": "src",
 		"declaration": true,
 		"declarationDir": "lib",
 		"emitDeclarationOnly": true,
