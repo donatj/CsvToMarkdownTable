@@ -63,7 +63,6 @@ export default [
 	// CommonJS build (for Node.js require)
 	{
 		input,
-		external: ['csv-walker'],
 		output : {
 			file   : 'lib/CsvToMarkdown.cjs',
 			format : 'cjs',

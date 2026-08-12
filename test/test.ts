@@ -1,4 +1,9 @@
+import { createRequire } from "node:module";
+
 import csvToMarkdown from "../src/CsvToMarkdown.js";
+
+const require = createRequire(import.meta.url);
+const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
 	test("should return headers and blank row when no csv data is passed and all other values, using default header setting and default tab delimeter", () => {
@@ -150,5 +155,13 @@ describe("csvToMarkdown", () => {
 			);
 			expect(result).toBe("|   |   |   | \n|---|---|---| \n| a | b | c | \n");
 		});
+	});
+});
+
+describe("CommonJS build", () => {
+	test("should work when required", () => {
+		const result = cjsCsvToMarkdown("a,b,c", ",");
+
+		expect(result).toBe("|   |   |   | \n|---|---|---| \n| a | b | c | \n");
 	});
 });
