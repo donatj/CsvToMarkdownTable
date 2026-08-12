@@ -5,7 +5,6 @@ name: Node.js CI
 
 permissions:
   contents: read
-  statuses: write
 
 on: [ push, pull_request ]
 
@@ -44,11 +43,3 @@ jobs:
 
     - name: Check generated lib is clean
       run: git diff --exit-code -- ./lib
-
-    - run: npm run cover
-
-    - name: Coveralls
-      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '24.x'
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
