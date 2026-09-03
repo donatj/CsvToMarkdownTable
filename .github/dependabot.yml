@@ -6,9 +6,6 @@ updates:
       interval: monthly
     versioning-strategy: increase
     groups:
-      typescript-eslint:
-        patterns:
-          - "@typescript-eslint/*"
       jest:
         patterns:
           - "*jest*"

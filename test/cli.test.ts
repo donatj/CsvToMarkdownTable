@@ -61,7 +61,9 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim ,`);
+			const { stdout, stderr } = await execAsync(
+				`cat ${tempFilePath} | ${cliPath} --delim ,`,
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -80,7 +82,9 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim , --headers`);
+			const { stdout, stderr } = await execAsync(
+				`cat ${tempFilePath} | ${cliPath} --delim , --headers`,
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("| a | b | c |");
@@ -90,7 +94,9 @@ describe("CLI Tool Tests", () => {
 
 			// The header row should not appear in the data section
 			const lines = stdout.trim().split("\n");
-			expect(lines.filter(line => line.includes("| a | b | c |")).length).toBe(1);
+			expect(
+				lines.filter((line) => line.includes("| a | b | c |")).length,
+			).toBe(1);
 		} finally {
 			cleanupTempFiles(tempFilePath);
 		}
@@ -102,7 +108,9 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :tab`);
+			const { stdout, stderr } = await execAsync(
+				`cat ${tempFilePath} | ${cliPath} --delim :tab`,
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -121,7 +129,9 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :comma`);
+			const { stdout, stderr } = await execAsync(
+				`cat ${tempFilePath} | ${cliPath} --delim :comma`,
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");
@@ -140,7 +150,9 @@ describe("CLI Tool Tests", () => {
 		const tempFilePath = createTempCsvFile(csvContent);
 
 		try {
-			const { stdout, stderr } = await execAsync(`cat ${tempFilePath} | ${cliPath} --delim :semicolon`);
+			const { stdout, stderr } = await execAsync(
+				`cat ${tempFilePath} | ${cliPath} --delim :semicolon`,
+			);
 
 			expect(stderr).toBe("");
 			expect(stdout).toContain("|   |   |   |");

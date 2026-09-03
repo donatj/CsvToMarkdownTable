@@ -13,7 +13,11 @@
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
  * @returns {string}
  */
-export default function csvToMarkdown(csvContent: string, delimiter: string = "\t", hasHeader: boolean = false): string {
+export default function csvToMarkdown(
+	csvContent: string,
+	delimiter: string = "\t",
+	hasHeader: boolean = false,
+): string {
 	if (delimiter != "\t") {
 		csvContent = csvContent.replace(/\t/g, "    ");
 	}
@@ -23,8 +27,10 @@ export default function csvToMarkdown(csvContent: string, delimiter: string = "\
 	const tabularData: string[][] = [];
 	const maxRowLen: number[] = [];
 
-	const regsafeDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	const regex = new RegExp(`${regsafeDelimiter}(?![^"]*"(?:$|${regsafeDelimiter}))`);
+	const regsafeDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	const regex = new RegExp(
+		`${regsafeDelimiter}(?![^"]*"(?:$|${regsafeDelimiter}))`,
+	);
 
 	columns.forEach((e, i) => {
 		if (typeof tabularData[i] == "undefined") {
@@ -65,7 +71,7 @@ export default function csvToMarkdown(csvContent: string, delimiter: string = "\
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			const row = typeof col[y] == "undefined" ? "" : col[y];
-			const spacing = Array((len - row.length) + 1).join(" ");
+			const spacing = Array(len - row.length + 1).join(" ");
 			const out = `| ${row}${spacing} `;
 			if (hasHeader && i === 0) {
 				headerOutput += out;
