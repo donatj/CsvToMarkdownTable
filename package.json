@@ -54,7 +54,7 @@
 		"@rollup/plugin-terser": "^1.0.0",
 		"@rollup/plugin-typescript": "^12.3.0",
 		"@types/jest": "^30.0.0",
-		"jest": "^30.4.2",
+		"jest": "^30.5.0",
 		"jest-environment-node": "^30.2.0",
 		"oxfmt": "^0.63.0",
 		"oxlint": "^1.78.0",
