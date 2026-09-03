@@ -66,6 +66,13 @@ describe("CLI Tool Tests", () => {
 		expect(stderr).toContain("No delimiter specified after --delim");
 	});
 
+	test("should reject multi-character delimiters", async () => {
+		const { exitCode, stderr } = await runCli(["--delim", "||"]);
+
+		expect(exitCode).not.toBe(0);
+		expect(stderr).toContain("Delimiter must be one character.");
+	});
+
 	// Test with input from standard input
 	test("should convert CSV to markdown table when input is piped", async () => {
 		const csvContent = "a,b,c\n1,2,3\n4,5,6";

@@ -118,6 +118,5 @@ The package.json is configured with the appropriate fields to ensure the correct
 
 - `main`: Points to the CommonJS build
 - `module`: Points to the ESM build
-- `browser`: Points to the UMD build
 - `unpkg`: Points to the minified UMD build
 - `exports`: Provides conditional exports for different environments
