@@ -1,12 +1,12 @@
 import csvToMarkdown from "../src/CsvToMarkdown";
 
 describe("csvToMarkdown", () => {
-	test("should return headers and blank row when no csv data is passed and all other values, using default header setting and default tab delimeter", () => {
+	test("should return headers and blank row when no csv data is passed and all other values, using default header setting and default tab delimiter", () => {
 		const result = csvToMarkdown("");
 		expect(result).toBe("|  | \n|--| \n|  | \n");
 	});
 
-	test("should return a table with blank headers, using default header setting and default tab delimeter", () => {
+	test("should return a table with blank headers, using default header setting and default tab delimiter", () => {
 		const result = csvToMarkdown("a\tb\tc");
 		expect(result).toBe("|   |   |   | \n|---|---|---| \n| a | b | c | \n");
 	});
@@ -40,7 +40,7 @@ describe("csvToMarkdown", () => {
 		});
 	});
 
-	test("should contain the separtor when it is wrapped in quotes", () => {
+	test("should contain the separator when it is wrapped in quotes", () => {
 		const cases = [
 			['a\t"b\tc"\td', "\t"],
 			['a,"b,c",d', ","],
@@ -61,7 +61,7 @@ describe("csvToMarkdown", () => {
 		expect(result).toBe("| a | b | c | \n|---|---|---| \n");
 	});
 
-	test("should convert tabs to 4 spaces to work on github", () => {
+	test("should convert tabs to 4 spaces to work on GitHub", () => {
 		const result = csvToMarkdown("a\tb\tc", ";", false);
 		expect(result).toBe(
 			"|             | \n|-------------| \n| a    b    c | \n",
@@ -82,7 +82,7 @@ describe("csvToMarkdown", () => {
 		);
 	});
 
-	test("should escape pipes and back slashes", () => {
+	test("should escape pipes and backslashes", () => {
 		const result = csvToMarkdown('"a|b|c|d",e\\f\\g', ",", false);
 		expect(result).toBe(
 			'|              |         | \n|--------------|---------| \n| "a\\|b\\|c\\|d" | e\\\\f\\\\g | \n',
