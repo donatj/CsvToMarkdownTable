@@ -20,8 +20,8 @@
 	"types": "./lib/CsvToMarkdown.d.ts",
 	"scripts": {
 		"test": "jest",
-		"format": "oxfmt --write src test",
-		"format:check": "oxfmt --check src test",
+		"format": "oxfmt --ignore-path .oxfmtignore --write src test",
+		"format:check": "oxfmt --ignore-path .oxfmtignore --check src test",
 		"lint": "oxlint src test",
 		"cover": "jest --coverage",
 		"clean": "rm -rf lib && rm -rf coverage",
