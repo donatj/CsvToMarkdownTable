@@ -9,7 +9,8 @@ Simple JavaScript CSV to Markdown Table Converter
 
 You can see it in action and play with the [Live Example](https://donatstudios.com/CsvToMarkdownTable).
 
-Requires **no external libraries**. Works in Node as well as in the browser.
+Uses [csv-walker](https://www.npmjs.com/package/csv-walker) for CSV parsing.
+Works in Node.js (>=20) as well as in the browser.
 
 ## Install
 
@@ -117,6 +118,5 @@ The package.json is configured with the appropriate fields to ensure the correct
 
 - `main`: Points to the CommonJS build
 - `module`: Points to the ESM build
-- `browser`: Points to the UMD build
 - `unpkg`: Points to the minified UMD build
 - `exports`: Provides conditional exports for different environments
