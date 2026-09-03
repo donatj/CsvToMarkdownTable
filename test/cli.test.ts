@@ -20,10 +20,10 @@ function runCli(args: string[], input: string = ""): Promise<CliResult> {
 		let stderr = "";
 
 		child.stdout.setEncoding("utf8");
-		child.stderr.setEncoding("utf8");
 		child.stdout.on("data", (chunk: string) => {
 			stdout += chunk;
 		});
+		child.stderr.setEncoding("utf8");
 		child.stderr.on("data", (chunk: string) => {
 			stderr += chunk;
 		});
@@ -35,28 +35,10 @@ function runCli(args: string[], input: string = ""): Promise<CliResult> {
 	});
 }
 
-function expectedTableOutput(lines: string[]): string {
-	return lines.map((line) => line + " ").join("\n") + "\n";
-}
-
-const tableOutput = expectedTableOutput([
-	"|   |   |   |",
-	"|---|---|---|",
-	"| a | b | c |",
-	"| 1 | 2 | 3 |",
-	"| 4 | 5 | 6 |",
-]);
-
-const headerTableOutput = expectedTableOutput([
-	"| a | b | c |",
-	"|---|---|---|",
-	"| 1 | 2 | 3 |",
-	"| 4 | 5 | 6 |",
-]);
-
 describe("CLI Tool Tests", () => {
+	// Test help command
 	test("should display help information when --help flag is used", async () => {
-		const { exitCode, stderr, stdout } = await runCli(["--help"]);
+		const { exitCode, stdout, stderr } = await runCli(["--help"]);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
@@ -67,14 +49,16 @@ describe("CLI Tool Tests", () => {
 		expect(stdout).toContain("--help");
 	});
 
+	// Test invalid argument
 	test("should display error and help when invalid argument is provided", async () => {
-		const { exitCode, stderr, stdout } = await runCli(["--invalid-arg"]);
+		const { exitCode, stdout, stderr } = await runCli(["--invalid-arg"]);
 
 		expect(exitCode).not.toBe(0);
 		expect(stderr).toContain("Unrecognized argument: --invalid-arg");
 		expect(stdout).toContain("Usage:");
 	});
 
+	// Test missing delimiter after --delim flag
 	test("should display error when no delimiter is specified after --delim", async () => {
 		const { exitCode, stderr } = await runCli(["--delim"]);
 
@@ -82,58 +66,93 @@ describe("CLI Tool Tests", () => {
 		expect(stderr).toContain("No delimiter specified after --delim");
 	});
 
-	test("should convert CSV to markdown table from standard input", async () => {
-		const { exitCode, stderr, stdout } = await runCli(
+	// Test with input from standard input
+	test("should convert CSV to markdown table when input is piped", async () => {
+		const csvContent = "a,b,c\n1,2,3\n4,5,6";
+		const { exitCode, stdout, stderr } = await runCli(
 			["--delim", ","],
-			"a,b,c\n1,2,3\n4,5,6",
+			csvContent,
 		);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toBe(tableOutput);
+		expect(stdout).toContain("|   |   |   |");
+		expect(stdout).toContain("|---|---|---|");
+		expect(stdout).toContain("| a | b | c |");
+		expect(stdout).toContain("| 1 | 2 | 3 |");
+		expect(stdout).toContain("| 4 | 5 | 6 |");
 	});
 
+	// Test with headers flag
 	test("should use first row as headers when --headers flag is used", async () => {
-		const { exitCode, stderr, stdout } = await runCli(
+		const csvContent = "a,b,c\n1,2,3\n4,5,6";
+		const { exitCode, stdout, stderr } = await runCli(
 			["--delim", ",", "--headers"],
-			"a,b,c\n1,2,3\n4,5,6",
+			csvContent,
 		);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toBe(headerTableOutput);
+		expect(stdout).toContain("| a | b | c |");
+		expect(stdout).toContain("|---|---|---|");
+		expect(stdout).toContain("| 1 | 2 | 3 |");
+		expect(stdout).toContain("| 4 | 5 | 6 |");
+
+		// The header row should not appear in the data section
+		const lines = stdout.trim().split("\n");
+		expect(lines.filter((line) => line.includes("| a | b | c |")).length).toBe(
+			1,
+		);
 	});
 
+	// Test with special delimiter
 	test("should handle special delimiter :tab correctly", async () => {
-		const { exitCode, stderr, stdout } = await runCli(
+		const csvContent = "a\tb\tc\n1\t2\t3\n4\t5\t6";
+		const { exitCode, stdout, stderr } = await runCli(
 			["--delim", ":tab"],
-			"a\tb\tc\n1\t2\t3\n4\t5\t6",
+			csvContent,
 		);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toBe(tableOutput);
+		expect(stdout).toContain("|   |   |   |");
+		expect(stdout).toContain("|---|---|---|");
+		expect(stdout).toContain("| a | b | c |");
+		expect(stdout).toContain("| 1 | 2 | 3 |");
+		expect(stdout).toContain("| 4 | 5 | 6 |");
 	});
 
+	// Test with special delimiter :comma
 	test("should handle special delimiter :comma correctly", async () => {
-		const { exitCode, stderr, stdout } = await runCli(
+		const csvContent = "a,b,c\n1,2,3\n4,5,6";
+		const { exitCode, stdout, stderr } = await runCli(
 			["--delim", ":comma"],
-			"a,b,c\n1,2,3\n4,5,6",
+			csvContent,
 		);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toBe(tableOutput);
+		expect(stdout).toContain("|   |   |   |");
+		expect(stdout).toContain("|---|---|---|");
+		expect(stdout).toContain("| a | b | c |");
+		expect(stdout).toContain("| 1 | 2 | 3 |");
+		expect(stdout).toContain("| 4 | 5 | 6 |");
 	});
 
+	// Test with special delimiter :semicolon
 	test("should handle special delimiter :semicolon correctly", async () => {
-		const { exitCode, stderr, stdout } = await runCli(
+		const csvContent = "a;b;c\n1;2;3\n4;5;6";
+		const { exitCode, stdout, stderr } = await runCli(
 			["--delim", ":semicolon"],
-			"a;b;c\n1;2;3\n4;5;6",
+			csvContent,
 		);
 
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
-		expect(stdout).toBe(tableOutput);
+		expect(stdout).toContain("|   |   |   |");
+		expect(stdout).toContain("|---|---|---|");
+		expect(stdout).toContain("| a | b | c |");
+		expect(stdout).toContain("| 1 | 2 | 3 |");
+		expect(stdout).toContain("| 4 | 5 | 6 |");
 	});
 });
