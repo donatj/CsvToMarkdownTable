@@ -5,9 +5,13 @@
  * This notice may not be removed or altered from any source distribution.
  */
 
-import { allValues, parse, separator } from "csv-walker";
+import { allValues, enclosure, escape, parse, separator } from "csv-walker";
 
 export interface CsvToMarkdownOptions {
+	/** Quoted-field enclosure passed to csv-walker when supplied. */
+	enclosure?: string;
+	/** CSV escape character; an empty string disables escaping. */
+	escape?: string;
 	/** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
 	newlineReplacement: string | null;
 	/** Transforms each parsed field, including headers, before Markdown formatting. */
@@ -43,7 +47,14 @@ export default function csvToMarkdown(
 		...options,
 	};
 
-	const tabularData = allValues(parse(csvContent, separator(delimiter)));
+	const parserOptions = [separator(delimiter)];
+	if (opt.enclosure !== undefined) {
+		parserOptions.push(enclosure(opt.enclosure));
+	}
+	if (opt.escape !== undefined) {
+		parserOptions.push(escape(opt.escape));
+	}
+	const tabularData = allValues(parse(csvContent, ...parserOptions));
 	const maxRowLen: number[] = [];
 
 	for (const values of tabularData) {

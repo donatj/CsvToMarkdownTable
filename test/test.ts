@@ -6,6 +6,32 @@ const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
+	test("should pass custom enclosure and escape settings to the parser", () => {
+		expect(
+			csvToMarkdown("'a,b','say !'hi, there!' '", ",", true, {
+				enclosure: "'",
+				escape: "!",
+				prettyPrint: false,
+			}),
+		).toBe("|a,b|say !'hi, there!' |\n|---|---|\n");
+	});
+
+	test("should allow CSV escaping to be disabled", () => {
+		expect(
+			csvToMarkdown('"a\\",b', ",", true, {
+				escape: "",
+				prettyPrint: false,
+			}),
+		).toBe("|a\\\\|b|\n|---|---|\n");
+	});
+
+	test.each([{ enclosure: "ab" }, { escape: "ab" }])(
+		"should retain csv-walker validation for %p",
+		(options) => {
+			expect(() => csvToMarkdown("a,b", ",", true, options)).toThrow(TypeError);
+		},
+	);
+
 	test("should preserve explicit overrides alongside omitted options", () => {
 		expect(
 			csvToMarkdown('"a\r\nb"', ",", true, {

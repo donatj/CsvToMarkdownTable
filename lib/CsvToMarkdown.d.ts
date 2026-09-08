@@ -5,6 +5,10 @@
  * This notice may not be removed or altered from any source distribution.
  */
 export interface CsvToMarkdownOptions {
+    /** Quoted-field enclosure passed to csv-walker when supplied. */
+    enclosure?: string;
+    /** CSV escape character; an empty string disables escaping. */
+    escape?: string;
     /** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
     newlineReplacement: string | null;
     /** Transforms each parsed field, including headers, before Markdown formatting. */
