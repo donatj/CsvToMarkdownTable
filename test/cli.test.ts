@@ -36,6 +36,31 @@ function runCli(args: string[], input: string = ""): Promise<CliResult> {
 }
 
 describe("CLI Tool Tests", () => {
+	test.each(["", "\n", "\r\n"])(
+		"should preserve boundary empty TSV fields with trailing newline %p",
+		async (newline) => {
+			const { exitCode, stdout, stderr } = await runCli(
+				[],
+				`\tA\nB\t${newline}`,
+			);
+
+			expect(exitCode).toBe(0);
+			expect(stderr).toBe("");
+			expect(stdout).toBe("|   |   | \n|---|---| \n|   | A | \n| B |   | \n");
+		},
+	);
+
+	test("should preserve spaces at the start and end of CSV input", async () => {
+		const { exitCode, stdout, stderr } = await runCli(
+			["--delim", ",", "--headers"],
+			" A,B \n",
+		);
+
+		expect(exitCode).toBe(0);
+		expect(stderr).toBe("");
+		expect(stdout).toBe("|  A | B  | \n|----|----| \n");
+	});
+
 	test("should preserve UTF-8 characters split across input chunks", () => {
 		// Supply a real byte stream with separate event-loop turns so pipe buffering
 		// cannot merge the chunks and hide a broken decoder.

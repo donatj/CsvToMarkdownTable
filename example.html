@@ -47,7 +47,7 @@
 		});
 
 		var renderTable = function () {
-			var value = input.value.trim();
+			var value = input.value;
 			var hasHeader = headerCheckbox.checked;
 
 			output.value = csvToMarkdown(value, getDelimiter(), hasHeader, {
