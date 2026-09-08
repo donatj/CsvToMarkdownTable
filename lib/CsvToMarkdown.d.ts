@@ -5,8 +5,8 @@
  * This notice may not be removed or altered from any source distribution.
  */
 export interface CsvToMarkdownOptions {
-    /** Replacement for newlines within CSV fields. Defaults to "<br>". */
-    newlineReplacement: string;
+    /** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
+    newlineReplacement: string | null;
     /** Transforms each parsed field, including headers, before Markdown formatting. */
     cellFilter: (value: string) => string;
 }

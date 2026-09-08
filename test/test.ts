@@ -185,6 +185,17 @@ describe("csvToMarkdown", () => {
 		},
 	);
 
+	test.each(["\n", "\r", "\r\n"])(
+		"should preserve quoted %p newlines when replacement is null",
+		(newline) => {
+			expect(
+				csvToMarkdown(`"a${newline}b|"`, ",", true, {
+					newlineReplacement: null,
+				}),
+			).toBe(`| a${newline}b\\| | \n|${"-".repeat(6 + newline.length)}| \n`);
+		},
+	);
+
 	test.each(["", "\n", "$&"])(
 		"should use newline replacement %p literally",
 		(newlineReplacement) => {

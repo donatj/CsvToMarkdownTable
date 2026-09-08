@@ -8,8 +8,8 @@
 import { allValues, parse, separator } from "csv-walker";
 
 export interface CsvToMarkdownOptions {
-	/** Replacement for newlines within CSV fields. Defaults to "<br>". */
-	newlineReplacement: string;
+	/** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
+	newlineReplacement: string | null;
 	/** Transforms each parsed field, including headers, before Markdown formatting. */
 	cellFilter: (value: string) => string;
 }
@@ -50,9 +50,10 @@ export default function csvToMarkdown(
 				value = value.replace(/\t/g, "    ");
 			}
 
-			value = value
-				.replace(/\r\n?|\n/g, () => newlineReplacement)
-				.replace(/(\||\\)/g, "\\$1");
+			if (newlineReplacement !== null) {
+				value = value.replace(/\r\n?|\n/g, () => newlineReplacement);
+			}
+			value = value.replace(/(\||\\)/g, "\\$1");
 			maxRowLen[index] = Math.max(maxRowLen[index] ?? 0, value.length);
 			values[index] = value;
 		});

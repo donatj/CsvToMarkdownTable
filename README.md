@@ -114,7 +114,8 @@ csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
 ```
 
 `newlineReplacement` sets the string used for newlines within CSV fields
-(LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them.
+(LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them or `null`
+to skip newline replacement and preserve the original newline characters.
 Existing calls without options retain the same behavior. TypeScript users can
 import the `CsvToMarkdownOptions` type; the argument accepts
 `Partial<CsvToMarkdownOptions>` so each setting can be supplied independently.
