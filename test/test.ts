@@ -1,19 +1,17 @@
 import { createRequire } from "node:module";
 
-import csvToMarkdown, {
-	CsvToMarkdownOptionsDefaults,
-} from "../src/CsvToMarkdown.js";
+import csvToMarkdown from "../src/CsvToMarkdown.js";
 
 const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
-	test("should merge options without changing the exported defaults", () => {
+	test("should merge options without changing the defaults or supplied options", () => {
 		const options = { newlineReplacement: "" };
 		csvToMarkdown('"a\nb"', ",", true, options);
-		expect(CsvToMarkdownOptionsDefaults).toEqual({
-			newlineReplacement: "<br>",
-		});
+		expect(csvToMarkdown('"a\nb"', ",", true)).toBe(
+			"| a<br>b | \n|--------| \n",
+		);
 		expect(options).toEqual({ newlineReplacement: "" });
 	});
 
@@ -200,12 +198,6 @@ describe("csvToMarkdown", () => {
 });
 
 describe("CommonJS build", () => {
-	test("should expose the defaults while remaining callable", () => {
-		expect(
-			require("../lib/CsvToMarkdown.cjs").CsvToMarkdownOptionsDefaults,
-		).toEqual(CsvToMarkdownOptionsDefaults);
-	});
-
 	test("should work when required", () => {
 		const result = cjsCsvToMarkdown("a,b,c", ",");
 

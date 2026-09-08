@@ -12,7 +12,7 @@ export interface CsvToMarkdownOptions {
 	newlineReplacement?: string;
 }
 
-export const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
+const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
 	newlineReplacement: "<br>",
 };
 

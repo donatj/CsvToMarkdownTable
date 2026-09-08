@@ -117,15 +117,7 @@ csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
 Existing calls without options retain the same behavior. TypeScript users can
 import the `CsvToMarkdownOptions` type.
 
-The defaults are exported as `CsvToMarkdownOptionsDefaults` and merged with the
-supplied options. Omit a property to use its default value.
-
-```js
-import { CsvToMarkdownOptionsDefaults } from "csv-to-markdown-table";
-```
-
-For CommonJS and browser scripts, the defaults are also available as
-`csvToMarkdown.CsvToMarkdownOptionsDefaults`.
+Supplied options are merged with the defaults. Omit a property to use its default value.
 
 ## Distribution Formats
 
