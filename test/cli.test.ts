@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawn, spawnSync } from "child_process";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
@@ -36,6 +36,34 @@ function runCli(args: string[], input: string = ""): Promise<CliResult> {
 }
 
 describe("CLI Tool Tests", () => {
+	test("should preserve UTF-8 characters split across input chunks", () => {
+		// Supply a real byte stream with separate event-loop turns so pipe buffering
+		// cannot merge the chunks and hide a broken decoder.
+		const script = `
+			import { Readable } from "node:stream";
+			import { setImmediate } from "node:timers/promises";
+			import { pathToFileURL } from "node:url";
+
+			const stdin = Readable.from((async function* () {
+				yield Buffer.from([0xc3]);
+				await setImmediate();
+				yield Buffer.from([0xa9]);
+			})(), { objectMode: false });
+			Object.defineProperty(process, "stdin", { value: stdin });
+			await import(pathToFileURL(process.argv[1]).href);
+		`;
+		const { status, stdout, stderr, error } = spawnSync(
+			process.execPath,
+			["--input-type=module", "--eval", script, cliPath, "--headers"],
+			{ encoding: "utf8", timeout: 5000 },
+		);
+
+		expect(error).toBeUndefined();
+		expect(status).toBe(0);
+		expect(stderr).toBe("");
+		expect(stdout).toBe("| é | \n|---| \n");
+	});
+
 	// Test help command
 	test("should display help information when --help flag is used", async () => {
 		const { exitCode, stdout, stderr } = await runCli(["--help"]);
