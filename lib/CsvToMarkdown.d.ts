@@ -7,6 +7,8 @@
 export interface CsvToMarkdownOptions {
     /** Replacement for newlines within CSV fields. Defaults to "<br>". */
     newlineReplacement?: string;
+    /** Transforms each parsed field, including headers, before Markdown formatting. */
+    cellFilter?: (value: string) => string;
 }
 /**
  * Converts CSV to Markdown Table

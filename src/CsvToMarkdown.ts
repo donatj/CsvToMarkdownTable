@@ -10,10 +10,13 @@ import { allValues, parse, separator } from "csv-walker";
 export interface CsvToMarkdownOptions {
 	/** Replacement for newlines within CSV fields. Defaults to "<br>". */
 	newlineReplacement?: string;
+	/** Transforms each parsed field, including headers, before Markdown formatting. */
+	cellFilter?: (value: string) => string;
 }
 
 const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
 	newlineReplacement: "<br>",
+	cellFilter: (value) => value,
 };
 
 /**
@@ -32,7 +35,7 @@ export default function csvToMarkdown(
 	hasHeader: boolean = false,
 	options: CsvToMarkdownOptions = {},
 ): string {
-	const { newlineReplacement } = {
+	const { newlineReplacement, cellFilter } = {
 		...CsvToMarkdownOptionsDefaults,
 		...options,
 	};
@@ -41,7 +44,7 @@ export default function csvToMarkdown(
 
 	for (const values of tabularData) {
 		values.forEach((column, index) => {
-			let value = column;
+			let value = cellFilter(column);
 
 			if (delimiter != "\t") {
 				value = value.replace(/\t/g, "    ");

@@ -109,6 +109,7 @@ The optional fourth argument accepts conversion settings:
 ```js
 csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
   newlineReplacement: "<br />",
+  cellFilter: (value) => value.trim(),
 });
 ```
 
@@ -116,6 +117,11 @@ csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
 (LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them.
 Existing calls without options retain the same behavior. TypeScript users can
 import the `CsvToMarkdownOptions` type.
+
+`cellFilter` accepts a `(value: string) => string` callback to transform each
+parsed CSV field, including headers and empty fields. It runs before tab and
+newline replacement, Markdown escaping, and column sizing. By default, values
+are returned unchanged.
 
 Supplied options are merged with the defaults. Omit a property to use its default value.
 

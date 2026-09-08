@@ -6,6 +6,34 @@ const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
+	test("should filter parsed fields including headers and empty strings", () => {
+		const seen: string[] = [];
+		const result = csvToMarkdown('name,note\nAda,"a,b"\nBob,', ",", true, {
+			cellFilter: (value) => {
+				seen.push(value);
+				return value.toUpperCase();
+			},
+		});
+		expect(seen).toEqual(["name", "note", "Ada", "a,b", "Bob", ""]);
+		expect(result).toBe(
+			"| NAME | NOTE | \n|------|------| \n| ADA  | A,B  | \n| BOB  |      | \n",
+		);
+	});
+
+	test("should format and size the filtered values", () => {
+		const result = csvToMarkdown("x", ",", true, {
+			cellFilter: () => "a\tb\nc|d\\e",
+			newlineReplacement: " / ",
+		});
+		expect(result).toBe("| a    b / c\\|d\\\\e | \n|------------------| \n");
+	});
+
+	test("should allow the filter to return an empty string", () => {
+		expect(csvToMarkdown("x", ",", true, { cellFilter: () => "" })).toBe(
+			"|  | \n|--| \n",
+		);
+	});
+
 	test("should merge options without changing the defaults or supplied options", () => {
 		const options = { newlineReplacement: "" };
 		csvToMarkdown('"a\nb"', ",", true, options);
