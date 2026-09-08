@@ -37,7 +37,7 @@ Usage: csv-to-markdown-table [options]
 
 $ csv-to-markdown-table --delimiter ',' --headers < example.csv
 | cats | dogs | fish | 
-|------|------|------| 
+|------|------|------|
 | 1    | 2    | 3    | 
 | 4    | 5    | 6    |
 $ csv-to-markdown-table
@@ -52,7 +52,7 @@ CSV Delimiter: \t (tab) Headers: false
 <script src="https://unpkg.com/csv-to-markdown-table"></script>
 <script>
   console.log(
-    csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+    csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
   );
 </script>
 ```
@@ -63,7 +63,7 @@ CSV Delimiter: \t (tab) Headers: false
 const csvToMarkdown = require("csv-to-markdown-table");
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
@@ -73,7 +73,7 @@ console.log(
 import csvToMarkdown from "csv-to-markdown-table";
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
@@ -83,24 +83,94 @@ console.log(
 import csvToMarkdown from "csv-to-markdown-table";
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
 #### Outputs:
 
 ```markdown
-| header1 | header2 | header3 | 
-|---------|---------|---------| 
-| Value1  | Value2  | Value3  | 
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
 ```
 
 Which displays in markdown as:
 
-| header1 | header2 | header3 | 
-|---------|---------|---------| 
-| Value1  | Value2  | Value3  | 
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
 
+
+### Options
+
+The optional fourth argument accepts conversion settings:
+
+```js
+csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
+  newlineReplacement: "<br />",
+  cellFilter: (value) => value.trim(),
+});
+```
+
+`newlineReplacement` sets the string used for newlines within CSV fields
+(LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them or `null`
+to skip newline replacement and preserve the original newline characters.
+Existing calls without options retain the same behavior. TypeScript users can
+import the `CsvToMarkdownOptions` type; the argument accepts
+`Partial<CsvToMarkdownOptions>` so each setting can be supplied independently.
+
+```ts
+import type { CsvToMarkdownOptions } from "csv-to-markdown-table";
+```
+
+`cellFilter` accepts a `(value: string) => string` callback to transform each
+parsed CSV field, including headers and empty fields. It runs before tab and
+newline replacement, Markdown escaping, and column sizing. By default, values
+are returned unchanged.
+
+Supplied options are merged with the defaults. Omit a property to use its default
+value; explicitly setting a property to `undefined` is unsupported. TypeScript
+users can enable `exactOptionalPropertyTypes` to catch this at compile time.
+
+`prettyPrint` defaults to `true`, padding cells to align columns. Set it to
+`false` for compact output with outer pipes and three-dash separators. Spaces
+within cell values are preserved.
+
+Both modes use the same input:
+
+```js
+const csv = [
+  "Name,Role,Location",
+  "Ada Lovelace,Mathematician,London",
+  "Grace Hopper,Computer scientist,New York",
+].join("\n");
+
+csvToMarkdown(csv, ",", true); // prettyPrint: true (default)
+csvToMarkdown(csv, ",", true, { prettyPrint: false });
+```
+
+With `prettyPrint: true`, columns line up in the Markdown source:
+
+```markdown
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
+```
+
+With `prettyPrint: false`, only the cell content and table delimiters remain:
+
+```markdown
+|Name|Role|Location|
+|---|---|---|
+|Ada Lovelace|Mathematician|London|
+|Grace Hopper|Computer scientist|New York|
+```
+
+Both render as the same table.
 
 ## Distribution Formats
 

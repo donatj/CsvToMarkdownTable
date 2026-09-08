@@ -8,6 +8,7 @@
 		"declarationDir": "lib",
 		"emitDeclarationOnly": true,
 		"strict": true,
+		"exactOptionalPropertyTypes": true,
 		"alwaysStrict": true,
 		"noImplicitAny": true,
 		"noImplicitThis": true,

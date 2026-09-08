@@ -6,6 +6,84 @@ const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
+	test("should preserve explicit overrides alongside omitted options", () => {
+		expect(
+			csvToMarkdown('"a\r\nb"', ",", true, {
+				newlineReplacement: null,
+				prettyPrint: false,
+			}),
+		).toBe("|a\r\nb|\n|---|\n");
+	});
+
+	test.each([
+		["Name,Age\nAda,37", true, "|Name|Age|\n|---|---|\n|Ada|37|\n"],
+		["Ada,37", false, "|||\n|---|---|\n|Ada|37|\n"],
+		["Name,Age", true, "|Name|Age|\n|---|---|\n"],
+		["a,b\nc\nd,e,f", true, "|a|b||\n|---|---|---|\n|c|||\n|d|e|f|\n"],
+		["", false, "||\n|---|\n||\n"],
+		["", true, "||\n|---|\n"],
+	])(
+		"should render compact tables for %p with headers %p",
+		(csv, headers, expected) => {
+			expect(csvToMarkdown(csv, ",", headers, { prettyPrint: false })).toBe(
+				expected,
+			);
+		},
+	);
+
+	test("should preserve cell content and transformations in compact tables", () => {
+		expect(
+			csvToMarkdown('" a|b\\c\nd "', ",", true, {
+				prettyPrint: false,
+				cellFilter: (value) => value.toUpperCase(),
+				newlineReplacement: "<br />",
+			}),
+		).toBe("| A\\|B\\\\C<br />D |\n|---|\n");
+	});
+
+	test("should retain existing formatting when prettyPrint is true", () => {
+		expect(csvToMarkdown("a,b\nc,d", ",", true, { prettyPrint: true })).toBe(
+			csvToMarkdown("a,b\nc,d", ",", true),
+		);
+	});
+
+	test("should filter parsed fields including headers and empty strings", () => {
+		const seen: string[] = [];
+		const result = csvToMarkdown('name,note\nAda,"a,b"\nBob,', ",", true, {
+			cellFilter: (value) => {
+				seen.push(value);
+				return value.toUpperCase();
+			},
+		});
+		expect(seen).toEqual(["name", "note", "Ada", "a,b", "Bob", ""]);
+		expect(result).toBe(
+			"| NAME | NOTE | \n|------|------| \n| ADA  | A,B  | \n| BOB  |      | \n",
+		);
+	});
+
+	test("should format and size the filtered values", () => {
+		const result = csvToMarkdown("x", ",", true, {
+			cellFilter: () => "a\tb\nc|d\\e",
+			newlineReplacement: " / ",
+		});
+		expect(result).toBe("| a    b / c\\|d\\\\e | \n|------------------| \n");
+	});
+
+	test("should allow the filter to return an empty string", () => {
+		expect(csvToMarkdown("x", ",", true, { cellFilter: () => "" })).toBe(
+			"|  | \n|--| \n",
+		);
+	});
+
+	test("should merge options without changing the defaults or supplied options", () => {
+		const options = { newlineReplacement: "" };
+		csvToMarkdown('"a\nb"', ",", true, options);
+		expect(csvToMarkdown('"a\nb"', ",", true)).toBe(
+			"| a<br>b | \n|--------| \n",
+		);
+		expect(options).toEqual({ newlineReplacement: "" });
+	});
+
 	test("should return headers and blank row when no csv data is passed and all other values, using default header setting and default tab delimeter", () => {
 		const result = csvToMarkdown("");
 		expect(result).toBe("|  | \n|--| \n|  | \n");
@@ -127,6 +205,47 @@ describe("csvToMarkdown", () => {
 			"| name | quote                | \n|------|----------------------| \n| Ada  | line one<br>line two | \n",
 		);
 	});
+
+	test.each([undefined, {}])(
+		"should preserve default newline replacement with options %p",
+		(options) => {
+			expect(csvToMarkdown('"a\nb"', ",", true, options)).toBe(
+				"| a<br>b | \n|--------| \n",
+			);
+		},
+	);
+
+	test.each(["\n", "\r", "\r\n"])(
+		"should replace quoted %p newlines with a custom string",
+		(newline) => {
+			expect(
+				csvToMarkdown(`"a${newline}b"`, ",", true, {
+					newlineReplacement: " / ",
+				}),
+			).toBe("| a / b | \n|-------| \n");
+		},
+	);
+
+	test.each(["\n", "\r", "\r\n"])(
+		"should preserve quoted %p newlines when replacement is null",
+		(newline) => {
+			expect(
+				csvToMarkdown(`"a${newline}b|"`, ",", true, {
+					newlineReplacement: null,
+				}),
+			).toBe(`| a${newline}b\\| | \n|${"-".repeat(6 + newline.length)}| \n`);
+		},
+	);
+
+	test.each(["", "\n", "$&"])(
+		"should use newline replacement %p literally",
+		(newlineReplacement) => {
+			const value = `a${newlineReplacement}b`;
+			expect(csvToMarkdown('"a\nb"', ",", true, { newlineReplacement })).toBe(
+				`| ${value} | \n|${"-".repeat(value.length + 2)}| \n`,
+			);
+		},
+	);
 
 	test("should handle delimiters that are regex special characters", () => {
 		const delimiters = [
