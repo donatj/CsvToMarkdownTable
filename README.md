@@ -127,6 +127,20 @@ are returned unchanged.
 
 Supplied options are merged with the defaults. Omit a property to use its default value.
 
+`prettyPrint` defaults to `true`, padding cells to align columns. Set it to
+`false` for compact output with outer pipes and three-dash separators. Spaces
+within cell values are preserved.
+
+```js
+csvToMarkdown("Name,Age\nAda,37", ",", true, { prettyPrint: false });
+```
+
+```markdown
+|Name|Age|
+|---|---|
+|Ada|37|
+```
+
 ## Distribution Formats
 
 This package is distributed in multiple formats:

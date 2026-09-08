@@ -9,6 +9,8 @@ export interface CsvToMarkdownOptions {
     newlineReplacement: string | null;
     /** Transforms each parsed field, including headers, before Markdown formatting. */
     cellFilter: (value: string) => string;
+    /** Pads cells to align columns. Defaults to true. */
+    prettyPrint: boolean;
 }
 /**
  * Converts CSV to Markdown Table

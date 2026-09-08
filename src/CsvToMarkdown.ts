@@ -12,11 +12,14 @@ export interface CsvToMarkdownOptions {
 	newlineReplacement: string | null;
 	/** Transforms each parsed field, including headers, before Markdown formatting. */
 	cellFilter: (value: string) => string;
+	/** Pads cells to align columns. Defaults to true. */
+	prettyPrint: boolean;
 }
 
 const CsvToMarkdownOptionsDefaults: CsvToMarkdownOptions = {
 	newlineReplacement: "<br>",
 	cellFilter: (value) => value,
+	prettyPrint: true,
 };
 
 /**
@@ -35,7 +38,7 @@ export default function csvToMarkdown(
 	hasHeader: boolean = false,
 	options: Partial<CsvToMarkdownOptions> = {},
 ): string {
-	const { newlineReplacement, cellFilter } = {
+	const { newlineReplacement, cellFilter, prettyPrint } = {
 		...CsvToMarkdownOptionsDefaults,
 		...options,
 	};
@@ -54,7 +57,9 @@ export default function csvToMarkdown(
 				value = value.replace(/\r\n?|\n/g, () => newlineReplacement);
 			}
 			value = value.replace(/(\||\\)/g, "\\$1");
-			maxRowLen[index] = Math.max(maxRowLen[index] ?? 0, value.length);
+			maxRowLen[index] = prettyPrint
+				? Math.max(maxRowLen[index] ?? 0, value.length)
+				: 0;
 			values[index] = value;
 		});
 	}
@@ -66,16 +71,17 @@ export default function csvToMarkdown(
 
 	let headerOutput = "";
 	let seperatorOutput = "";
+	const rowEnding = prettyPrint ? "| \n" : "|\n";
 
 	maxRowLen.forEach((len) => {
 		const sizer = Array(len + 1 + 2);
 
-		seperatorOutput += "|" + sizer.join("-");
-		headerOutput += "|" + sizer.join(" ");
+		seperatorOutput += "|" + (prettyPrint ? sizer.join("-") : "---");
+		headerOutput += "|" + (prettyPrint ? sizer.join(" ") : "");
 	});
 
-	headerOutput += "| \n";
-	seperatorOutput += "| \n";
+	headerOutput += rowEnding;
+	seperatorOutput += rowEnding;
 
 	if (hasHeader) {
 		headerOutput = "";
@@ -85,8 +91,8 @@ export default function csvToMarkdown(
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			const row = typeof col[y] == "undefined" ? "" : col[y];
-			const spacing = Array(len - row.length + 1).join(" ");
-			const out = `| ${row}${spacing} `;
+			const spacing = prettyPrint ? Array(len - row.length + 1).join(" ") : "";
+			const out = prettyPrint ? `| ${row}${spacing} ` : `|${row}`;
 			if (hasHeader && i === 0) {
 				headerOutput += out;
 			} else {
@@ -95,9 +101,9 @@ export default function csvToMarkdown(
 		});
 
 		if (hasHeader && i === 0) {
-			headerOutput += "| \n";
+			headerOutput += rowEnding;
 		} else {
-			rowOutput += "| \n";
+			rowOutput += rowEnding;
 		}
 	});
 

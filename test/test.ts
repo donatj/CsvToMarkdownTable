@@ -6,6 +6,38 @@ const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
+	test.each([
+		["Name,Age\nAda,37", true, "|Name|Age|\n|---|---|\n|Ada|37|\n"],
+		["Ada,37", false, "|||\n|---|---|\n|Ada|37|\n"],
+		["Name,Age", true, "|Name|Age|\n|---|---|\n"],
+		["a,b\nc\nd,e,f", true, "|a|b||\n|---|---|---|\n|c|||\n|d|e|f|\n"],
+		["", false, "||\n|---|\n||\n"],
+		["", true, "||\n|---|\n"],
+	])(
+		"should render compact tables for %p with headers %p",
+		(csv, headers, expected) => {
+			expect(csvToMarkdown(csv, ",", headers, { prettyPrint: false })).toBe(
+				expected,
+			);
+		},
+	);
+
+	test("should preserve cell content and transformations in compact tables", () => {
+		expect(
+			csvToMarkdown('" a|b\\c\nd "', ",", true, {
+				prettyPrint: false,
+				cellFilter: (value) => value.toUpperCase(),
+				newlineReplacement: "<br />",
+			}),
+		).toBe("| A\\|B\\\\C<br />D |\n|---|\n");
+	});
+
+	test("should retain existing formatting when prettyPrint is true", () => {
+		expect(csvToMarkdown("a,b\nc,d", ",", true, { prettyPrint: true })).toBe(
+			csvToMarkdown("a,b\nc,d", ",", true),
+		);
+	});
+
 	test("should filter parsed fields including headers and empty strings", () => {
 		const seen: string[] = [];
 		const result = csvToMarkdown('name,note\nAda,"a,b"\nBob,', ",", true, {
