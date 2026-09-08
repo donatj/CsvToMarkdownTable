@@ -115,6 +115,18 @@ csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
 });
 ```
 
+`enclosure` and `escape` are optional strings passed to csv-walker
+when supplied. Omitting them retains csv-walker's defaults: `enclosure` is `"`,
+and `escape` is `\`. Enclosure and escape must each be a
+single character, except that `escape: ""` disables CSV escaping.
+
+```js
+csvToMarkdown("'name','note'\n'Ada','hello, world'", ",", true, {
+  enclosure: "'",
+  escape: "",
+});
+```
+
 `newlineReplacement` sets the string used for newlines within CSV fields
 (LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them or `null`
 to skip newline replacement and preserve the original newline characters.
