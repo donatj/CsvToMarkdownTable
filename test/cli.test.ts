@@ -1,6 +1,8 @@
 import { spawn } from "child_process";
 import * as path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cliPath = path.resolve(__dirname, "../bin/csv-to-markdown-table");
 
 interface CliResult {
@@ -62,6 +64,13 @@ describe("CLI Tool Tests", () => {
 
 		expect(exitCode).not.toBe(0);
 		expect(stderr).toContain("No delimiter specified after --delim");
+	});
+
+	test("should reject multi-character delimiters", async () => {
+		const { exitCode, stderr } = await runCli(["--delim", "||"]);
+
+		expect(exitCode).not.toBe(0);
+		expect(stderr).toContain("Delimiter must be one character.");
 	});
 
 	// Test with input from standard input

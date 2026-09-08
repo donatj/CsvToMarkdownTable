@@ -1,0 +1,24 @@
+# This workflow reports code coverage from the supported Node.js release to Coveralls.
+
+name: Coverage
+
+permissions:
+  contents: read
+
+on: [push, pull_request]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: Use Node.js 26.x
+      uses: actions/setup-node@v7
+      with:
+        node-version: 26.x
+    - run: npm ci
+    - run: npm run cover
+    - uses: coverallsapp/github-action@v2
+      with:
+        file: coverage/lcov.info
