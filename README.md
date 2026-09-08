@@ -37,7 +37,7 @@ Usage: csv-to-markdown-table [options]
 
 $ csv-to-markdown-table --delimiter ',' --headers < example.csv
 | cats | dogs | fish | 
-|------|------|------| 
+|------|------|------|
 | 1    | 2    | 3    | 
 | 4    | 5    | 6    |
 $ csv-to-markdown-table
@@ -52,7 +52,7 @@ CSV Delimiter: \t (tab) Headers: false
 <script src="https://unpkg.com/csv-to-markdown-table"></script>
 <script>
   console.log(
-    csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+    csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
   );
 </script>
 ```
@@ -63,7 +63,7 @@ CSV Delimiter: \t (tab) Headers: false
 const csvToMarkdown = require("csv-to-markdown-table");
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
@@ -73,7 +73,7 @@ console.log(
 import csvToMarkdown from "csv-to-markdown-table";
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
@@ -83,23 +83,25 @@ console.log(
 import csvToMarkdown from "csv-to-markdown-table";
 
 console.log(
-  csvToMarkdown("header1,header2,header3\nValue1,Value2,Value3", ",", true)
+  csvToMarkdown("Name,Role,Location\nAda Lovelace,Mathematician,London\nGrace Hopper,Computer scientist,New York", ",", true)
 );
 ```
 
 #### Outputs:
 
 ```markdown
-| header1 | header2 | header3 | 
-|---------|---------|---------| 
-| Value1  | Value2  | Value3  | 
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
 ```
 
 Which displays in markdown as:
 
-| header1 | header2 | header3 | 
-|---------|---------|---------| 
-| Value1  | Value2  | Value3  | 
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
 
 
 ### Options
@@ -131,15 +133,38 @@ Supplied options are merged with the defaults. Omit a property to use its defaul
 `false` for compact output with outer pipes and three-dash separators. Spaces
 within cell values are preserved.
 
+Both modes use the same input:
+
 ```js
-csvToMarkdown("Name,Age\nAda,37", ",", true, { prettyPrint: false });
+const csv = [
+  "Name,Role,Location",
+  "Ada Lovelace,Mathematician,London",
+  "Grace Hopper,Computer scientist,New York",
+].join("\n");
+
+csvToMarkdown(csv, ",", true); // prettyPrint: true (default)
+csvToMarkdown(csv, ",", true, { prettyPrint: false });
 ```
 
+With `prettyPrint: true`, columns line up in the Markdown source:
+
 ```markdown
-|Name|Age|
-|---|---|
-|Ada|37|
+| Name         | Role               | Location |
+|--------------|--------------------|----------|
+| Ada Lovelace | Mathematician      | London   |
+| Grace Hopper | Computer scientist | New York |
 ```
+
+With `prettyPrint: false`, only the cell content and table delimiters remain:
+
+```markdown
+|Name|Role|Location|
+|---|---|---|
+|Ada Lovelace|Mathematician|London|
+|Grace Hopper|Computer scientist|New York|
+```
+
+Both render as the same table.
 
 ## Distribution Formats
 
