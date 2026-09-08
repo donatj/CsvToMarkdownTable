@@ -6,26 +6,10 @@ const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
-	test.each([
-		{ newlineReplacement: undefined },
-		{ cellFilter: undefined },
-		{ prettyPrint: undefined },
-		{
-			newlineReplacement: undefined,
-			cellFilter: undefined,
-			prettyPrint: undefined,
-		},
-	])("should use defaults for explicitly undefined options %p", (options) => {
-		expect(csvToMarkdown('"a\nb"', ",", true, options)).toBe(
-			"| a<br>b | \n|--------| \n",
-		);
-	});
-
-	test("should preserve explicit overrides alongside undefined options", () => {
+	test("should preserve explicit overrides alongside omitted options", () => {
 		expect(
 			csvToMarkdown('"a\r\nb"', ",", true, {
 				newlineReplacement: null,
-				cellFilter: undefined,
 				prettyPrint: false,
 			}),
 		).toBe("|a\r\nb|\n|---|\n");

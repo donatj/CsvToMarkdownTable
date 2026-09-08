@@ -131,8 +131,9 @@ parsed CSV field, including headers and empty fields. It runs before tab and
 newline replacement, Markdown escaping, and column sizing. By default, values
 are returned unchanged.
 
-Supplied options are merged with the defaults. Omit a property or set it to
-`undefined` to use its default value.
+Supplied options are merged with the defaults. Omit a property to use its default
+value; explicitly setting a property to `undefined` is unsupported. TypeScript
+users can enable `exactOptionalPropertyTypes` to catch this at compile time.
 
 `prettyPrint` defaults to `true`, padding cells to align columns. Set it to
 `false` for compact output with outer pipes and three-dash separators. Spaces

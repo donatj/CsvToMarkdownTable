@@ -38,30 +38,28 @@ export default function csvToMarkdown(
 	hasHeader: boolean = false,
 	options: Partial<CsvToMarkdownOptions> = {},
 ): string {
-	const {
-		newlineReplacement = CsvToMarkdownOptionsDefaults.newlineReplacement,
-		cellFilter = CsvToMarkdownOptionsDefaults.cellFilter,
-		prettyPrint = CsvToMarkdownOptionsDefaults.prettyPrint,
-	} = {
+	const opt: CsvToMarkdownOptions = {
 		...CsvToMarkdownOptionsDefaults,
 		...options,
 	};
+
 	const tabularData = allValues(parse(csvContent, separator(delimiter)));
 	const maxRowLen: number[] = [];
 
 	for (const values of tabularData) {
 		values.forEach((column, index) => {
-			let value = cellFilter(column);
+			let value = opt.cellFilter(column);
 
 			if (delimiter != "\t") {
 				value = value.replace(/\t/g, "    ");
 			}
 
-			if (newlineReplacement !== null) {
-				value = value.replace(/\r\n?|\n/g, () => newlineReplacement);
+			if (opt.newlineReplacement !== null) {
+				const replacement = opt.newlineReplacement;
+				value = value.replace(/\r\n?|\n/g, () => replacement);
 			}
 			value = value.replace(/(\||\\)/g, "\\$1");
-			maxRowLen[index] = prettyPrint
+			maxRowLen[index] = opt.prettyPrint
 				? Math.max(maxRowLen[index] ?? 0, value.length)
 				: 0;
 			values[index] = value;
@@ -75,13 +73,13 @@ export default function csvToMarkdown(
 
 	let headerOutput = "";
 	let seperatorOutput = "";
-	const rowEnding = prettyPrint ? "| \n" : "|\n";
+	const rowEnding = opt.prettyPrint ? "| \n" : "|\n";
 
 	maxRowLen.forEach((len) => {
 		const sizer = Array(len + 1 + 2);
 
-		seperatorOutput += "|" + (prettyPrint ? sizer.join("-") : "---");
-		headerOutput += "|" + (prettyPrint ? sizer.join(" ") : "");
+		seperatorOutput += "|" + (opt.prettyPrint ? sizer.join("-") : "---");
+		headerOutput += "|" + (opt.prettyPrint ? sizer.join(" ") : "");
 	});
 
 	headerOutput += rowEnding;
@@ -95,8 +93,10 @@ export default function csvToMarkdown(
 	tabularData.forEach((col, i) => {
 		maxRowLen.forEach((len, y) => {
 			const row = typeof col[y] == "undefined" ? "" : col[y];
-			const spacing = prettyPrint ? Array(len - row.length + 1).join(" ") : "";
-			const out = prettyPrint ? `| ${row}${spacing} ` : `|${row}`;
+			const spacing = opt.prettyPrint
+				? Array(len - row.length + 1).join(" ")
+				: "";
+			const out = opt.prettyPrint ? `| ${row}${spacing} ` : `|${row}`;
 			if (hasHeader && i === 0) {
 				headerOutput += out;
 			} else {
