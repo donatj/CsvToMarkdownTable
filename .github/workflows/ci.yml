@@ -33,13 +33,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 26.x to build
+      uses: actions/setup-node@v7
+      with:
+        node-version: 26.x
+    - run: npm ci
+    - run: npm run build:all
+    - name: Use Node.js ${{ matrix.node-version }} to test
       uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build:all
-    - run: npm test
+    - run: npm run test:built
 
     - name: Check generated lib is clean
       run: git diff --exit-code -- ./lib

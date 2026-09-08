@@ -186,6 +186,20 @@ Both render as the same table.
 
 ## Distribution Formats
 
+### Building from source
+
+Use Node.js 26 to install development dependencies and build the package:
+
+```sh
+npm ci
+npm test
+```
+
+tsdown builds the JavaScript bundles; TypeScript generates declarations, including
+the CommonJS adapter. Published bundles continue to support Node.js 20 and newer.
+
+### Outputs
+
 This package is distributed in multiple formats:
 
 - **UMD**: Universal Module Definition for browsers and legacy environments (includes csvToMarkdown global variable when loaded in a browser)
