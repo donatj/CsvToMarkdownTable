@@ -35,7 +35,7 @@ $ csv-to-markdown-table --help
 Usage: csv-to-markdown-table [options]
 // … help output
 
-$ csv-to-markdown-table --delimiter ',' --headers < example.csv
+$ csv-to-markdown-table --delim ',' --headers < example.csv
 | cats | dogs | fish | 
 |------|------|------|
 | 1    | 2    | 3    | 
