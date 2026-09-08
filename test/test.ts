@@ -128,6 +128,36 @@ describe("csvToMarkdown", () => {
 		);
 	});
 
+	test.each([undefined, {}, { newlineReplacement: undefined }])(
+		"should preserve default newline replacement with options %p",
+		(options) => {
+			expect(csvToMarkdown('"a\nb"', ",", true, options)).toBe(
+				"| a<br>b | \n|--------| \n",
+			);
+		},
+	);
+
+	test.each(["\n", "\r", "\r\n"])(
+		"should replace quoted %p newlines with a custom string",
+		(newline) => {
+			expect(
+				csvToMarkdown(`"a${newline}b"`, ",", true, {
+					newlineReplacement: " / ",
+				}),
+			).toBe("| a / b | \n|-------| \n");
+		},
+	);
+
+	test.each(["", "\n", "$&"])(
+		"should use newline replacement %p literally",
+		(newlineReplacement) => {
+			const value = `a${newlineReplacement}b`;
+			expect(csvToMarkdown('"a\nb"', ",", true, { newlineReplacement })).toBe(
+				`| ${value} | \n|${"-".repeat(value.length + 2)}| \n`,
+			);
+		},
+	);
+
 	test("should handle delimiters that are regex special characters", () => {
 		const delimiters = [
 			"[",

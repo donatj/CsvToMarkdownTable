@@ -102,6 +102,21 @@ Which displays in markdown as:
 | Value1  | Value2  | Value3  | 
 
 
+### Options
+
+The optional fourth argument accepts conversion settings:
+
+```js
+csvToMarkdown('name,quote\nAda,"line one\nline two"', ",", true, {
+  newlineReplacement: "<br />",
+});
+```
+
+`newlineReplacement` sets the string used for newlines within CSV fields
+(LF, CR, or CRLF). It defaults to `"<br>"`; use `""` to remove them.
+Existing calls without options retain the same behavior. TypeScript users can
+import the `CsvToMarkdownOptions` type.
+
 ## Distribution Formats
 
 This package is distributed in multiple formats:

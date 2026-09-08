@@ -4,12 +4,17 @@
  *
  * This notice may not be removed or altered from any source distribution.
  */
+export interface CsvToMarkdownOptions {
+    /** Replacement for newlines within CSV fields. Defaults to "<br>". */
+    newlineReplacement?: string;
+}
 /**
  * Converts CSV to Markdown Table
  *
  * @param {string} csvContent - The string content of the CSV
  * @param {string} delimiter - The character to use as the CSV column delimiter
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
+ * @param {CsvToMarkdownOptions} options - Optional conversion settings
  * @returns {string}
  */
-export default function csvToMarkdown(csvContent: string, delimiter?: string, hasHeader?: boolean): string;
+export default function csvToMarkdown(csvContent: string, delimiter?: string, hasHeader?: boolean, options?: CsvToMarkdownOptions): string;

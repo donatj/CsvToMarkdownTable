@@ -7,12 +7,18 @@
 
 import { allValues, parse, separator } from "csv-walker";
 
+export interface CsvToMarkdownOptions {
+	/** Replacement for newlines within CSV fields. Defaults to "<br>". */
+	newlineReplacement?: string;
+}
+
 /**
  * Converts CSV to Markdown Table
  *
  * @param {string} csvContent - The string content of the CSV
  * @param {string} delimiter - The character to use as the CSV column delimiter
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
+ * @param {CsvToMarkdownOptions} options - Optional conversion settings
  * @returns {string}
  */
 
@@ -20,7 +26,9 @@ export default function csvToMarkdown(
 	csvContent: string,
 	delimiter: string = "\t",
 	hasHeader: boolean = false,
+	options: CsvToMarkdownOptions = {},
 ): string {
+	const newlineReplacement = options.newlineReplacement ?? "<br>";
 	const tabularData = allValues(parse(csvContent, separator(delimiter)));
 	const maxRowLen: number[] = [];
 
@@ -32,7 +40,9 @@ export default function csvToMarkdown(
 				value = value.replace(/\t/g, "    ");
 			}
 
-			value = value.replace(/\r\n?|\n/g, "<br>").replace(/(\||\\)/g, "\\$1");
+			value = value
+				.replace(/\r\n?|\n/g, () => newlineReplacement)
+				.replace(/(\||\\)/g, "\\$1");
 			maxRowLen[index] = Math.max(maxRowLen[index] ?? 0, value.length);
 			values[index] = value;
 		});
