@@ -3,6 +3,7 @@ import terser from '@rollup/plugin-terser';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 
 const input = 'src/CsvToMarkdown.ts';
+const compatInput = 'src/CsvToMarkdown.compat.ts';
 const name = 'csvToMarkdown';
 
 // Shared TypeScript configuration
@@ -17,7 +18,7 @@ const typescriptPlugin = typescript({
 export default [
 	// UMD build (for browsers, works as a global)
 	{
-		input,
+		input: compatInput,
 		output : {
 			file   : 'lib/CsvToMarkdown.js',
 			format : 'umd',
@@ -32,7 +33,7 @@ export default [
 	},
 	// UMD minified
 	{
-		input,
+		input: compatInput,
 		output : {
 			file     : 'lib/CsvToMarkdown.min.js',
 			format   : 'umd',
@@ -62,7 +63,7 @@ export default [
 	},
 	// CommonJS build (for Node.js require)
 	{
-		input,
+		input: compatInput,
 		output : {
 			file   : 'lib/CsvToMarkdown.cjs',
 			format : 'cjs',

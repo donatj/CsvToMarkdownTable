@@ -1,11 +1,22 @@
 import { createRequire } from "node:module";
 
-import csvToMarkdown from "../src/CsvToMarkdown.js";
+import csvToMarkdown, {
+	CsvToMarkdownOptionsDefaults,
+} from "../src/CsvToMarkdown.js";
 
 const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
 
 describe("csvToMarkdown", () => {
+	test("should merge options without changing the exported defaults", () => {
+		const options = { newlineReplacement: "" };
+		csvToMarkdown('"a\nb"', ",", true, options);
+		expect(CsvToMarkdownOptionsDefaults).toEqual({
+			newlineReplacement: "<br>",
+		});
+		expect(options).toEqual({ newlineReplacement: "" });
+	});
+
 	test("should return headers and blank row when no csv data is passed and all other values, using default header setting and default tab delimeter", () => {
 		const result = csvToMarkdown("");
 		expect(result).toBe("|  | \n|--| \n|  | \n");
@@ -128,7 +139,7 @@ describe("csvToMarkdown", () => {
 		);
 	});
 
-	test.each([undefined, {}, { newlineReplacement: undefined }])(
+	test.each([undefined, {}])(
 		"should preserve default newline replacement with options %p",
 		(options) => {
 			expect(csvToMarkdown('"a\nb"', ",", true, options)).toBe(
@@ -189,6 +200,12 @@ describe("csvToMarkdown", () => {
 });
 
 describe("CommonJS build", () => {
+	test("should expose the defaults while remaining callable", () => {
+		expect(
+			require("../lib/CsvToMarkdown.cjs").CsvToMarkdownOptionsDefaults,
+		).toEqual(CsvToMarkdownOptionsDefaults);
+	});
+
 	test("should work when required", () => {
 		const result = cjsCsvToMarkdown("a,b,c", ",");
 

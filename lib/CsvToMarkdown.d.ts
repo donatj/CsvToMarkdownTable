@@ -8,6 +8,7 @@ export interface CsvToMarkdownOptions {
     /** Replacement for newlines within CSV fields. Defaults to "<br>". */
     newlineReplacement?: string;
 }
+export declare const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions>;
 /**
  * Converts CSV to Markdown Table
  *

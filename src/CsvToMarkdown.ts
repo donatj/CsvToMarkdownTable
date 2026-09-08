@@ -12,6 +12,10 @@ export interface CsvToMarkdownOptions {
 	newlineReplacement?: string;
 }
 
+export const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
+	newlineReplacement: "<br>",
+};
+
 /**
  * Converts CSV to Markdown Table
  *
@@ -28,7 +32,10 @@ export default function csvToMarkdown(
 	hasHeader: boolean = false,
 	options: CsvToMarkdownOptions = {},
 ): string {
-	const newlineReplacement = options.newlineReplacement ?? "<br>";
+	const { newlineReplacement } = {
+		...CsvToMarkdownOptionsDefaults,
+		...options,
+	};
 	const tabularData = allValues(parse(csvContent, separator(delimiter)));
 	const maxRowLen: number[] = [];
 
