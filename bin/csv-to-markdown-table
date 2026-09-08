@@ -52,6 +52,7 @@ if (process.stdin.isTTY) {
 }
 
 let data = '';
+process.stdin.setEncoding('utf8');
 process.stdin.on('readable', () => {
 	let chunk;
 	// Keep reading data until there's none left.
