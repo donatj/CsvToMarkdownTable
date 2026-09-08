@@ -9,12 +9,12 @@ import { allValues, parse, separator } from "csv-walker";
 
 export interface CsvToMarkdownOptions {
 	/** Replacement for newlines within CSV fields. Defaults to "<br>". */
-	newlineReplacement?: string;
+	newlineReplacement: string;
 	/** Transforms each parsed field, including headers, before Markdown formatting. */
-	cellFilter?: (value: string) => string;
+	cellFilter: (value: string) => string;
 }
 
-const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
+const CsvToMarkdownOptionsDefaults: CsvToMarkdownOptions = {
 	newlineReplacement: "<br>",
 	cellFilter: (value) => value,
 };
@@ -25,7 +25,7 @@ const CsvToMarkdownOptionsDefaults: Required<CsvToMarkdownOptions> = {
  * @param {string} csvContent - The string content of the CSV
  * @param {string} delimiter - The character to use as the CSV column delimiter
  * @param {boolean} hasHeader - Whether to use the first row of Data as headers
- * @param {CsvToMarkdownOptions} options - Optional conversion settings
+ * @param {Partial<CsvToMarkdownOptions>} options - Optional conversion settings
  * @returns {string}
  */
 
@@ -33,7 +33,7 @@ export default function csvToMarkdown(
 	csvContent: string,
 	delimiter: string = "\t",
 	hasHeader: boolean = false,
-	options: CsvToMarkdownOptions = {},
+	options: Partial<CsvToMarkdownOptions> = {},
 ): string {
 	const { newlineReplacement, cellFilter } = {
 		...CsvToMarkdownOptionsDefaults,
