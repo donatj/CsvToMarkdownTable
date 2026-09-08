@@ -38,7 +38,11 @@ export default function csvToMarkdown(
 	hasHeader: boolean = false,
 	options: Partial<CsvToMarkdownOptions> = {},
 ): string {
-	const { newlineReplacement, cellFilter, prettyPrint } = {
+	const {
+		newlineReplacement = CsvToMarkdownOptionsDefaults.newlineReplacement,
+		cellFilter = CsvToMarkdownOptionsDefaults.cellFilter,
+		prettyPrint = CsvToMarkdownOptionsDefaults.prettyPrint,
+	} = {
 		...CsvToMarkdownOptionsDefaults,
 		...options,
 	};

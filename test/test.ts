@@ -7,6 +7,31 @@ const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs
 
 describe("csvToMarkdown", () => {
 	test.each([
+		{ newlineReplacement: undefined },
+		{ cellFilter: undefined },
+		{ prettyPrint: undefined },
+		{
+			newlineReplacement: undefined,
+			cellFilter: undefined,
+			prettyPrint: undefined,
+		},
+	])("should use defaults for explicitly undefined options %p", (options) => {
+		expect(csvToMarkdown('"a\nb"', ",", true, options)).toBe(
+			"| a<br>b | \n|--------| \n",
+		);
+	});
+
+	test("should preserve explicit overrides alongside undefined options", () => {
+		expect(
+			csvToMarkdown('"a\r\nb"', ",", true, {
+				newlineReplacement: null,
+				cellFilter: undefined,
+				prettyPrint: false,
+			}),
+		).toBe("|a\r\nb|\n|---|\n");
+	});
+
+	test.each([
 		["Name,Age\nAda,37", true, "|Name|Age|\n|---|---|\n|Ada|37|\n"],
 		["Ada,37", false, "|||\n|---|---|\n|Ada|37|\n"],
 		["Name,Age", true, "|Name|Age|\n|---|---|\n"],

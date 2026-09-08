@@ -122,12 +122,17 @@ Existing calls without options retain the same behavior. TypeScript users can
 import the `CsvToMarkdownOptions` type; the argument accepts
 `Partial<CsvToMarkdownOptions>` so each setting can be supplied independently.
 
+```ts
+import type { CsvToMarkdownOptions } from "csv-to-markdown-table";
+```
+
 `cellFilter` accepts a `(value: string) => string` callback to transform each
 parsed CSV field, including headers and empty fields. It runs before tab and
 newline replacement, Markdown escaping, and column sizing. By default, values
 are returned unchanged.
 
-Supplied options are merged with the defaults. Omit a property to use its default value.
+Supplied options are merged with the defaults. Omit a property or set it to
+`undefined` to use its default value.
 
 `prettyPrint` defaults to `true`, padding cells to align columns. Set it to
 `false` for compact output with outer pipes and three-dash separators. Spaces
