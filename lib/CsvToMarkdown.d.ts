@@ -11,8 +11,8 @@ export interface CsvToMarkdownOptions {
     escape?: string;
     /** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
     newlineReplacement: string | null;
-    /** Transforms each parsed field, including headers, before Markdown formatting. */
-    cellFilter: (value: string) => string;
+    /** Transforms each parsed field; indexes are zero-based and include headers. */
+    cellFilter: (value: string, rowIndex: number, columnIndex: number) => string;
     /** Pads cells to align columns. Defaults to true. */
     prettyPrint: boolean;
 }
