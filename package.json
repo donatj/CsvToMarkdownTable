@@ -7,9 +7,14 @@
 	"unpkg": "./lib/CsvToMarkdown.min.js",
 	"exports": {
 		".": {
-			"types": "./lib/CsvToMarkdown.d.ts",
-			"import": "./lib/CsvToMarkdown.mjs",
-			"require": "./lib/CsvToMarkdown.cjs",
+			"import": {
+				"types": "./lib/CsvToMarkdown.d.ts",
+				"default": "./lib/CsvToMarkdown.mjs"
+			},
+			"require": {
+				"types": "./lib/CsvToMarkdown.d.cts",
+				"default": "./lib/CsvToMarkdown.cjs"
+			},
 			"default": "./lib/CsvToMarkdown.mjs"
 		}
 	},

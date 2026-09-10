@@ -1,9 +1,31 @@
+import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
 import csvToMarkdown from "../src/CsvToMarkdown.js";
 
 const require = createRequire(import.meta.url);
 const cjsCsvToMarkdown: typeof csvToMarkdown = require("../lib/CsvToMarkdown.cjs");
+
+test.each([
+	["commonjs", 'const csv = require("csv-to-markdown-table");'],
+	["module", 'import csv from "csv-to-markdown-table";'],
+])("package root works in %s", (mode, load) => {
+	const output = execFileSync(
+		process.execPath,
+		[
+			`--input-type=${mode}`,
+			"--eval",
+			`${load} process.stdout.write(csv("a,b", ",", true));`,
+		],
+		{
+			cwd: fileURLToPath(new URL("..", import.meta.url)),
+			encoding: "utf8",
+			timeout: 5000,
+		},
+	);
+	expect(output).toBe("| a | b | \n|---|---| \n");
+});
 
 describe("csvToMarkdown", () => {
 	test("should pass custom enclosure and escape settings to the parser", () => {
