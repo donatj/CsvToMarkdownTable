@@ -109,6 +109,33 @@ describe("csvToMarkdown", () => {
 		);
 	});
 
+	test.each([false, true])(
+		"should pass parsed field indexes with headers %p",
+		(hasHeader) => {
+			const seen: [string, number, number][] = [];
+			csvToMarkdown(
+				'name,note\nAda,"line one\nline two"\nBob,\nSolo',
+				",",
+				hasHeader,
+				{
+					cellFilter: (value, rowIndex, columnIndex) => {
+						seen.push([value, rowIndex, columnIndex]);
+						return value;
+					},
+				},
+			);
+			expect(seen).toEqual([
+				["name", 0, 0],
+				["note", 0, 1],
+				["Ada", 1, 0],
+				["line one\nline two", 1, 1],
+				["Bob", 2, 0],
+				["", 2, 1],
+				["Solo", 3, 0],
+			]);
+		},
+	);
+
 	test("should format and size the filtered values", () => {
 		const result = csvToMarkdown("x", ",", true, {
 			cellFilter: () => "a\tb\nc|d\\e",

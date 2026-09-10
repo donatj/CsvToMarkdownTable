@@ -138,10 +138,20 @@ import the `CsvToMarkdownOptions` type; the argument accepts
 import type { CsvToMarkdownOptions } from "csv-to-markdown-table";
 ```
 
-`cellFilter` accepts a `(value: string) => string` callback to transform each
+`cellFilter` accepts a `(value: string, rowIndex: number, columnIndex: number) => string` callback to transform each
 parsed CSV field, including headers and empty fields. It runs before tab and
 newline replacement, Markdown escaping, and column sizing. By default, values
 are returned unchanged.
+
+Indexes are zero-based and refer to parsed CSV rows and columns, including the
+header row. Callbacks can ignore either or both indexes. For example, to uppercase
+only the first row:
+
+```js
+csvToMarkdown(csv, ",", true, {
+  cellFilter: (value, rowIndex) => rowIndex === 0 ? value.toUpperCase() : value,
+});
+```
 
 Supplied options are merged with the defaults. Omit a property to use its default
 value; explicitly setting a property to `undefined` is unsupported. TypeScript

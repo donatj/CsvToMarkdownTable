@@ -14,8 +14,8 @@ export interface CsvToMarkdownOptions {
 	escape?: string;
 	/** Replacement for newlines within CSV fields. Defaults to "<br>"; null skips replacement. */
 	newlineReplacement: string | null;
-	/** Transforms each parsed field, including headers, before Markdown formatting. */
-	cellFilter: (value: string) => string;
+	/** Transforms each parsed field; indexes are zero-based and include headers. */
+	cellFilter: (value: string, rowIndex: number, columnIndex: number) => string;
 	/** Pads cells to align columns. Defaults to true. */
 	prettyPrint: boolean;
 }
@@ -57,9 +57,9 @@ export default function csvToMarkdown(
 	const tabularData = allValues(parse(csvContent, ...parserOptions));
 	const maxRowLen: number[] = [];
 
-	for (const values of tabularData) {
+	for (const [rowIndex, values] of tabularData.entries()) {
 		values.forEach((column, index) => {
-			let value = opt.cellFilter(column);
+			let value = opt.cellFilter(column, rowIndex, index);
 
 			if (delimiter != "\t") {
 				value = value.replace(/\t/g, "    ");
