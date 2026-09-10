@@ -18,7 +18,9 @@
 			"default": "./lib/CsvToMarkdown.mjs"
 		}
 	},
-	"bin": "./bin/csv-to-markdown-table",
+	"bin": {
+		"csv-to-markdown-table": "bin/csv-to-markdown-table"
+	},
 	"version": "1.6.3",
 	"types": "./lib/CsvToMarkdown.d.ts",
 	"scripts": {
