@@ -3,7 +3,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const cliPath = path.resolve(__dirname, "../bin/csv-to-markdown-table");
+const cliPath = path.resolve(__dirname, "../bin/csv2md");
 
 interface CliResult {
 	exitCode: number | null;
@@ -96,6 +96,7 @@ describe("CLI Tool Tests", () => {
 		expect(exitCode).toBe(0);
 		expect(stderr).toBe("");
 		expect(stdout).toContain("Usage:");
+		expect(stdout).toContain("Usage: csv2md [options]");
 		expect(stdout).toContain("Options:");
 		expect(stdout).toContain("--delim");
 		expect(stdout).toContain("--headers");
