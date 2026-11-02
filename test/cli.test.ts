@@ -46,7 +46,9 @@ describe("CLI Tool Tests", () => {
 
 			expect(exitCode).toBe(0);
 			expect(stderr).toBe("");
-			expect(stdout).toBe("|   |   | \n|---|---| \n|   | A | \n| B |   | \n");
+			expect(stdout).toBe(
+				"|   |   | \n|---|---| \n|   | A | \n| B |   | \n",
+			);
 		},
 	);
 
@@ -160,9 +162,9 @@ describe("CLI Tool Tests", () => {
 
 		// The header row should not appear in the data section
 		const lines = stdout.trim().split("\n");
-		expect(lines.filter((line) => line.includes("| a | b | c |")).length).toBe(
-			1,
-		);
+		expect(
+			lines.filter((line) => line.includes("| a | b | c |")).length,
+		).toBe(1);
 	});
 
 	// Test with special delimiter
