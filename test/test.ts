@@ -50,7 +50,9 @@ describe("csvToMarkdown", () => {
 	test.each([{ enclosure: "ab" }, { escape: "ab" }])(
 		"should retain csv-walker validation for %p",
 		(options) => {
-			expect(() => csvToMarkdown("a,b", ",", true, options)).toThrow(TypeError);
+			expect(() => csvToMarkdown("a,b", ",", true, options)).toThrow(
+				TypeError,
+			);
 		},
 	);
 
@@ -73,9 +75,9 @@ describe("csvToMarkdown", () => {
 	])(
 		"should render compact tables for %p with headers %p",
 		(csv, headers, expected) => {
-			expect(csvToMarkdown(csv, ",", headers, { prettyPrint: false })).toBe(
-				expected,
-			);
+			expect(
+				csvToMarkdown(csv, ",", headers, { prettyPrint: false }),
+			).toBe(expected);
 		},
 	);
 
@@ -90,9 +92,9 @@ describe("csvToMarkdown", () => {
 	});
 
 	test("should retain existing formatting when prettyPrint is true", () => {
-		expect(csvToMarkdown("a,b\nc,d", ",", true, { prettyPrint: true })).toBe(
-			csvToMarkdown("a,b\nc,d", ",", true),
-		);
+		expect(
+			csvToMarkdown("a,b\nc,d", ",", true, { prettyPrint: true }),
+		).toBe(csvToMarkdown("a,b\nc,d", ",", true));
 	});
 
 	test("should filter parsed fields including headers and empty strings", () => {
@@ -141,7 +143,9 @@ describe("csvToMarkdown", () => {
 			cellFilter: () => "a\tb\nc|d\\e",
 			newlineReplacement: " / ",
 		});
-		expect(result).toBe("| a    b / c\\|d\\\\e | \n|------------------| \n");
+		expect(result).toBe(
+			"| a    b / c\\|d\\\\e | \n|------------------| \n",
+		);
 	});
 
 	test("should allow the filter to return an empty string", () => {
@@ -192,7 +196,9 @@ describe("csvToMarkdown", () => {
 		];
 		cases.forEach((entry) => {
 			const result = csvToMarkdown(entry[0], entry[1], false);
-			expect(result).toBe("|   |   |   | \n|---|---|---| \n| a | b | c | \n");
+			expect(result).toBe(
+				"|   |   |   | \n|---|---|---| \n| a | b | c | \n",
+			);
 		});
 	});
 
@@ -209,7 +215,9 @@ describe("csvToMarkdown", () => {
 		cases.forEach((entry) => {
 			const result = csvToMarkdown(entry[0], entry[1], false);
 			expect(result).toBe(
-				"|   |     |   | \n|---|-----|---| \n| a | b" + entry[1] + "c | d | \n",
+				"|   |     |   | \n|---|-----|---| \n| a | b" +
+					entry[1] +
+					"c | d | \n",
 			);
 		});
 	});
@@ -264,7 +272,11 @@ describe("csvToMarkdown", () => {
 	});
 
 	test("should parse doubled enclosures", () => {
-		const result = csvToMarkdown('name,quote\nAda,"said ""hi"""', ",", true);
+		const result = csvToMarkdown(
+			'name,quote\nAda,"said ""hi"""',
+			",",
+			true,
+		);
 		expect(result).toBe(
 			'| name | quote     | \n|------|-----------| \n| Ada  | said "hi" | \n',
 		);
@@ -308,7 +320,9 @@ describe("csvToMarkdown", () => {
 				csvToMarkdown(`"a${newline}b|"`, ",", true, {
 					newlineReplacement: null,
 				}),
-			).toBe(`| a${newline}b\\| | \n|${"-".repeat(6 + newline.length)}| \n`);
+			).toBe(
+				`| a${newline}b\\| | \n|${"-".repeat(6 + newline.length)}| \n`,
+			);
 		},
 	);
 
@@ -316,9 +330,9 @@ describe("csvToMarkdown", () => {
 		"should use newline replacement %p literally",
 		(newlineReplacement) => {
 			const value = `a${newlineReplacement}b`;
-			expect(csvToMarkdown('"a\nb"', ",", true, { newlineReplacement })).toBe(
-				`| ${value} | \n|${"-".repeat(value.length + 2)}| \n`,
-			);
+			expect(
+				csvToMarkdown('"a\nb"', ",", true, { newlineReplacement }),
+			).toBe(`| ${value} | \n|${"-".repeat(value.length + 2)}| \n`);
 		},
 	);
 
@@ -347,7 +361,9 @@ describe("csvToMarkdown", () => {
 				delimiter,
 				false,
 			);
-			expect(result).toBe("|   |   |   | \n|---|---|---| \n| a | b | c | \n");
+			expect(result).toBe(
+				"|   |   |   | \n|---|---|---| \n| a | b | c | \n",
+			);
 		});
 	});
 });
